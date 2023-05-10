@@ -5,12 +5,12 @@ jobs:
   rspec:
     strategy:
       matrix:
-        <<[lang]>>: [ ]
+        php: [ ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: <<[lang]>>/setup-<<[lang]>>@v1
+    - uses: php/setup-<<[lang]>>@v1
       with:
-        <<[lang]>>-version: ${{ matrix.<<[lang]>> }}
+        php-version: ${{ matrix.<<[lang]>> }}
     - name: Build and test with
       run: |
