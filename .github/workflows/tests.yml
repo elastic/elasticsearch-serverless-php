@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: php/setup-<<[lang]>>@v1
+    - uses: php/setup-php@v1
       with:
-        php-version: ${{ matrix.<<[lang]>> }}
+        php-version: ${{ matrix.php }}
     - name: Build and test with
       run: |
