@@ -1,6 +1,16 @@
-*.gem
-.bundle
-Gemfile.lock
-.DS_Store
-tmp
-*.log
+#composer related
+composer.lock
+vendor/
+composer.phar
+.php_cs.cache
+
+#editor related
+.idea
+.vscode/
+
+# PHPUnit
+/phpunit.xml
+.phpunit.result.cache
+
+# Exclude .ci/make.sh artifcats
+.ci/output

@@ -1,8 +1,8 @@
 # Elasticsearch Serverless Client
 
-[![main](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/elastic/elasticsearch-serverless-<<[lang]>>/actions/workflows/tests.yml)
+[![main](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml)
 
-This is the official Elastic client for the **Elasticsearch Serverless** service. If you're looking to develop your Php application with the Elasticsearch Stack, you should look at the [Elasticsearch Client](https://github.com/elastic/elasticsearch-php) instead. If you're looking to develop your {LANG} application with Elastic Enterprise Search, you should look at the [Enterprise Search Client](https://github.com/elastic/enterprise-search-<<[lang]>>/).
+This is the official Elastic client for the **Elasticsearch Serverless** service. If you're looking to develop your PHP application with the Elasticsearch Stack, you should look at the [Elasticsearch Client](https://github.com/elastic/elasticsearch-php) instead. If you're looking to develop your {LANG} application with Elastic Enterprise Search, you should look at the [Enterprise Search Client](https://github.com/elastic/enterprise-search-php/).
 
 ## Installation
 
