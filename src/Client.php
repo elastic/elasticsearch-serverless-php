@@ -27,8 +27,9 @@ use Psr\Log\LoggerInterface;
 
 final class Client implements ClientInterface
 {
-    const CLIENT_NAME = 'es-serverless';
-    const VERSION = '0.1';
+    const CLIENT_NAME = 'esv';
+    const VERSION = '0.1.0';
+    const API_VERSION = '20231031';
     const API_COMPATIBILITY_HEADER = '%s/vnd.elasticsearch+%s; compatible-with=8';
     
     use ClientEndpointsTrait;
@@ -151,7 +152,11 @@ final class Client implements ClientInterface
         // If async returns a Promise
         if ($this->getAsync()) {
             if ($this->getElasticMetaHeader()) {
-                $this->transport->setElasticMetaHeader(Client::CLIENT_NAME, Client::VERSION, true);
+                $this->transport->setElasticMetaHeader(
+                    Client::CLIENT_NAME, 
+                    sprintf("%s+%s", Client::VERSION, Client::API_VERSION),
+                    true
+                );
             }
             $this->transport->setAsyncOnSuccess(
                 $request->getMethod() === 'HEAD'
