@@ -1,6 +1,6 @@
 <?php
 /**
- * Elasticsearch PHP Client
+ * Elasticsearch Serverless PHP Client
  *
  * @link      https://github.com/elastic/elasticsearch-serverless-php
  * @copyright Copyright (c) Elasticsearch B.V (https://www.elastic.co)

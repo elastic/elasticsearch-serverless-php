@@ -1,6 +1,6 @@
 <?php
 /**
- * Elasticsearch PHP Client
+ * Elasticsearch Serverless PHP Client
  *
  * @link      https://github.com/elastic/elasticsearch-serverless-php
  * @copyright Copyright (c) Elasticsearch B.V (https://www.elastic.co)
@@ -19,11 +19,11 @@ use Elastic\Elasticsearch\Serverless\Exception\AuthenticationException;
 use Elastic\Elasticsearch\Serverless\Exception\ConfigException;
 use Elastic\Elasticsearch\Serverless\Exception\HttpClientException;
 use Elastic\Elasticsearch\Serverless\Exception\InvalidArgumentException;
+use Elastic\Elasticsearch\Serverless\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Transport\Adapter\AdapterInterface;
 use Elastic\Elasticsearch\Transport\Adapter\AdapterOptions;
 use Elastic\Elasticsearch\Transport\RequestOptions;
 use Elastic\Transport\Exception\NoAsyncClientException;
-use Elastic\Transport\NodePool\NodePoolInterface;
 use Elastic\Transport\Transport;
 use Elastic\Transport\TransportBuilder;
 use GuzzleHttp\Client as GuzzleHttpClient;
@@ -34,8 +34,6 @@ use ReflectionClass;
 
 class ClientBuilder
 {
-    const DEFAULT_HOST = 'localhost:9200';
-
     /**
      * PSR-18 client
      */
@@ -52,29 +50,14 @@ class ClientBuilder
     private LoggerInterface $logger;
 
     /**
-     * The NodelPool
+     * Serverless endpoint (host)
      */
-    private NodePoolInterface $nodePool;
-
-    /**
-     * Hosts (elasticsearch nodes)
-     */
-    private array $hosts;
+    private string $host;
 
     /**
      * Elasticsearch API key
      */
     private string $apiKey;
-
-    /**
-     * Basic authentication username
-     */
-    private string $username;
-
-    /**
-     * Basic authentication password
-     */
-    private string $password;
 
     /**
      * Elastic cloud Id
@@ -141,8 +124,7 @@ class ClientBuilder
 
     /**
      * Build a new client from the provided config.  Hash keys
-     * should correspond to the method name e.g. ['nodePool']
-     * corresponds to setNodePool().
+     * should correspond to the method name.
      *
      * Missing keys will use the default for that setting if applicable
      *
@@ -200,38 +182,20 @@ class ClientBuilder
     }
 
     /**
-     * Set the hosts (nodes)
+     * Set the serverless endpoint (host)
      */
-    public function setHosts(array $hosts): ClientBuilder
+    public function setHost(string $host): ClientBuilder
     {
-        $this->hosts = $hosts;
+        $this->host = $host;
         return $this;
     }
 
     /**
-     * Set the ApiKey
-     * If the id is not specified we store the ApiKey otherwise
-     * we store as Base64(id:ApiKey)
-     *
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-create-api-key.html
+     * Set the ApiKey for Serverless
      */
-    public function setApiKey(string $apiKey, string $id = null): ClientBuilder
+    public function setApiKey(string $apiKey): ClientBuilder
     {
-        if (empty($id)) {
-            $this->apiKey = $apiKey;
-        } else {
-            $this->apiKey = base64_encode($id . ':' . $apiKey);
-        }
-        return $this;
-    }
-
-    /**
-     * Set the Basic Authentication
-     */
-    public function setBasicAuthentication(string $username, string $password): ClientBuilder
-    {
-        $this->username = $username;
-        $this->password = $password;
+        $this->apiKey = $apiKey;
         return $this;
     }
 
@@ -323,10 +287,10 @@ class ClientBuilder
         $builder = TransportBuilder::create();
 
         // Set the default hosts if empty
-        if (empty($this->hosts)) {
-            $this->hosts = [self::DEFAULT_HOST];
+        if (empty($this->host)) {
+            throw new MissingParameterException('You need specify the serverleess endpoint (host)');
         }
-        $builder->setHosts($this->hosts);
+        $builder->setHosts([$this->host]);
 
         // Logger
         if (!empty($this->logger)) {    
@@ -356,19 +320,12 @@ class ClientBuilder
         if (!empty($this->asyncHttpClient)) {
             $transport->setAsyncClient($this->asyncHttpClient);
         }
-        
-        // Basic authentication
-        if (!empty($this->username) && !empty($this->password)) {
-            $transport->setUserInfo($this->username, $this->password);
-        }
 
         // API key
-        if (!empty($this->apiKey)) {
-            if (!empty($this->username)) {
-                throw new AuthenticationException('You cannot use APIKey and Basic Authenication together');
-            }
-            $transport->setHeader('Authorization', sprintf("ApiKey %s", $this->apiKey));
+        if (empty($this->apiKey)) {
+            throw new AuthenticationException('You need to use an API key generated in Elastic Cloud');
         }
+        $transport->setHeader('Authorization', sprintf("ApiKey %s", $this->apiKey));
 
         /**
          * Serverless optimization with gzip
