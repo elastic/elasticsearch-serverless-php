@@ -1,16 +1,48 @@
-name: main
-on: [push]
+name: PHP test
+
+on: [push, pull_request]
 
 jobs:
-  rspec:
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
-        php: [ ]
-    runs-on: ubuntu-latest
+        php-version: [8.0, 8.1, 8.2]
+        os: [ubuntu-latest]
+
     steps:
-    - uses: actions/checkout@v2
-    - uses: php/setup-php@v1
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Use PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php }}
-    - name: Build and test with
+        php-version: ${{ matrix.php-version }}
+        extensions: yaml, zip, curl
+        coverage: none
+      env:
+        COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   
+    - name: Get composer cache directory
+      id: composercache
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.composercache.outputs.dir }}
+        key: ${{ runner.os }}-php-${{ matrix.php-version }}-${{ hashFiles('**/composer.json') }}
+        restore-keys: ${{ runner.os }}-php-${{ matrix.php-version }}-
+
+    - name: Install dependencies
       run: |
+        composer install --prefer-dist
+
+    - name: PHP Static Analysis Tool
+      run: |
+        composer run-script phpstan
+
+    - name: Unit tests
+      run: |
+        composer run-script test
