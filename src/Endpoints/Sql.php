@@ -26,14 +26,14 @@ use Http\Promise\Promise;
 /**
  * @generated This file is generated, please do not edit
  */
-class SearchApplication extends AbstractEndpoint
+class Sql extends AbstractEndpoint
 {
 	/**
-	 * Deletes a search application.
+	 * Clears the SQL cursor
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-search-application.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/clear-sql-cursor-api.html
 	 *
-	 * @param string $name The name of the search application to delete
+	 * @param array|string $body The request body
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -47,9 +47,41 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function delete(string $name, array $params = []): Elasticsearch|Promise
+	public function clearCursor(array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
+		$url = "/_sql/close";
+		$method = 'POST';
+		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
+	}
+
+
+	/**
+	 * Deletes an async SQL search or a stored synchronous SQL search. If the search is still running, the API cancels it.
+	 *
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-async-sql-search-api.html
+	 *
+	 * @param string $id Identifier for the search.
+	 * @param array{
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function deleteAsync(string $id, array $params = []): Elasticsearch|Promise
+	{
+		$url = '/_sql/async/delete/' . $this->encode($id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -60,13 +92,16 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Delete a behavioral analytics collection.
+	 * Returns the current status and available results for an async SQL search or stored synchronous SQL search
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-analytics-collection.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-async-sql-search-api.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
-	 * @param string $name The name of the analytics collection to be deleted
+	 * @param string $id Identifier for the search.
 	 * @param array{
+	 *     delimiter: string, // Separator for CSV results. The API only supports this parameter for CSV responses.
+	 *     format: string, // Format for the response. You must specify a format using this parameter or theAccept HTTP header. If you specify both, the API uses this parameter.
+	 *     keep_alive: string|integer, // Retention period for the search and its results. Defaultsto the `keep_alive` period for the original SQL search.
+	 *     wait_for_completion_timeout: string|integer, // Period to wait for complete results. Defaults to no timeout,meaning the request waits for complete search results.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -79,116 +114,15 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function deleteBehavioralAnalytics(string $name, array $params = []): Elasticsearch|Promise
+	public function getAsync(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/analytics/' . $this->encode($name) . '';
-		$method = 'DELETE';
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
-		$headers = [
-		    'Accept' => 'application/json',
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
-	}
-
-
-	/**
-	 * Returns the details about a search application.
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-search-application.html
-	 *
-	 * @param string $name The name of the search application
-	 * @param array{
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function get(string $name, array $params = []): Elasticsearch|Promise
-	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
-		$method = 'GET';
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
-		$headers = [
-		    'Accept' => 'application/json',
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
-	}
-
-
-	/**
-	 * Returns the existing behavioral analytics collections.
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/list-analytics-collection.html
-	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
-	 * @param array $name A list of analytics collections to limit the returned information
-	 * @param array{
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function getBehavioralAnalytics(array $name = null, array $params = []): Elasticsearch|Promise
-	{
-		$name = $this->convertValue($name);
-		if (isset($name)) {
-			$url = '/_application/analytics/' . $this->encode($name) . '';
-			$method = 'GET';
-		} else {
-			$url = "/_application/analytics";
-			$method = 'GET';
-		}
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
-		$headers = [
-		    'Accept' => 'application/json',
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
-	}
-
-
-	/**
-	 * Returns the existing search applications.
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/list-search-applications.html
-	 *
-	 * @param array{
-	 *     q: string, // Query in the Lucene query string syntax.
-	 *     from: integer, // Starting offset.
-	 *     size: integer, // Specifies a max number of results to get.
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function list(array $params = []): Elasticsearch|Promise
-	{
-		$url = "/_application/search_application";
+		$url = '/_sql/async/' . $this->encode($id) . '';
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
-			'q',
-			'from',
-			'size',
+			'delimiter',
+			'format',
+			'keep_alive',
+			'wait_for_completion_timeout',
 			'pretty',
 			'human',
 			'error_trace',
@@ -203,46 +137,11 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates a search application.
+	 * Returns the current status of an async SQL search or a stored synchronous SQL search
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-search-application.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-async-sql-search-status-api.html
 	 *
-	 * @param string $name The name of the search application to be created or updated.
-	 * @param array|string $body The request body
-	 * @param array{
-	 *     create: bool, // If `true`, this request cannot replace or update existing Search Applications.
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function put(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
-	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
-		$method = 'PUT';
-		$url = $this->addQueryString($url, $params, ['create', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
-		$headers = [
-		    'Accept' => 'application/json',
-		    'Content-Type' => 'application/json'
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
-	}
-
-
-	/**
-	 * Creates a behavioral analytics collection.
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-analytics-collection.html
-	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
-	 * @param string $name The name of the analytics collection to be created or updated.
+	 * @param string $id Identifier for the search.
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -256,10 +155,10 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function putBehavioralAnalytics(string $name, array $params = []): Elasticsearch|Promise
+	public function getAsyncStatus(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/analytics/' . $this->encode($name) . '';
-		$method = 'PUT';
+		$url = '/_sql/async/status/' . $this->encode($id) . '';
+		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
@@ -269,11 +168,43 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Perform a search against a search application
+	 * Executes a SQL request
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-application-search.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/sql-search-api.html
 	 *
-	 * @param string $name The name of the search application to be searched.
+	 * @param array|string $body The request body
+	 * @param array{
+	 *     format: string, // Format for the response.
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function query(array|string $body = [], array $params = []): Elasticsearch|Promise
+	{
+		$url = "/_sql";
+		$method = empty($body) ? 'GET' : 'POST';
+		$url = $this->addQueryString($url, $params, ['format', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
+	}
+
+
+	/**
+	 * Translates SQL into Elasticsearch queries
+	 *
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/sql-translate-api.html
+	 *
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -288,9 +219,9 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function search(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
+	public function translate(array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '/_search';
+		$url = "/_sql/translate";
 		$method = empty($body) ? 'GET' : 'POST';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

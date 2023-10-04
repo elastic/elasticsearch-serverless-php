@@ -20,13 +20,19 @@ use Elastic\Elasticsearch\Serverless\Endpoints\AsyncSearch;
 use Elastic\Elasticsearch\Serverless\Endpoints\Cat;
 use Elastic\Elasticsearch\Serverless\Endpoints\Cluster;
 use Elastic\Elasticsearch\Serverless\Endpoints\Enrich;
+use Elastic\Elasticsearch\Serverless\Endpoints\Eql;
 use Elastic\Elasticsearch\Serverless\Endpoints\Graph;
 use Elastic\Elasticsearch\Serverless\Endpoints\Indices;
 use Elastic\Elasticsearch\Serverless\Endpoints\Ingest;
+use Elastic\Elasticsearch\Serverless\Endpoints\License;
 use Elastic\Elasticsearch\Serverless\Endpoints\Logstash;
 use Elastic\Elasticsearch\Serverless\Endpoints\Ml;
+use Elastic\Elasticsearch\Serverless\Endpoints\QueryRuleset;
 use Elastic\Elasticsearch\Serverless\Endpoints\SearchApplication;
 use Elastic\Elasticsearch\Serverless\Endpoints\Security;
+use Elastic\Elasticsearch\Serverless\Endpoints\Sql;
+use Elastic\Elasticsearch\Serverless\Endpoints\Synonyms;
+use Elastic\Elasticsearch\Serverless\Endpoints\Tasks;
 use Elastic\Elasticsearch\Serverless\Endpoints\Transform;
 
 /**
@@ -74,6 +80,15 @@ trait NamespaceTrait
 	}
 
 
+	public function eql(): Eql
+	{
+		if (!isset($this->namespace['Eql'])) {
+			$this->namespace['Eql'] = new Eql($this);
+		}
+		return $this->namespace['Eql'];
+	}
+
+
 	public function graph(): Graph
 	{
 		if (!isset($this->namespace['Graph'])) {
@@ -101,6 +116,15 @@ trait NamespaceTrait
 	}
 
 
+	public function license(): License
+	{
+		if (!isset($this->namespace['License'])) {
+			$this->namespace['License'] = new License($this);
+		}
+		return $this->namespace['License'];
+	}
+
+
 	public function logstash(): Logstash
 	{
 		if (!isset($this->namespace['Logstash'])) {
@@ -119,6 +143,15 @@ trait NamespaceTrait
 	}
 
 
+	public function queryRuleset(): QueryRuleset
+	{
+		if (!isset($this->namespace['QueryRuleset'])) {
+			$this->namespace['QueryRuleset'] = new QueryRuleset($this);
+		}
+		return $this->namespace['QueryRuleset'];
+	}
+
+
 	public function searchApplication(): SearchApplication
 	{
 		if (!isset($this->namespace['SearchApplication'])) {
@@ -134,6 +167,33 @@ trait NamespaceTrait
 			$this->namespace['Security'] = new Security($this);
 		}
 		return $this->namespace['Security'];
+	}
+
+
+	public function sql(): Sql
+	{
+		if (!isset($this->namespace['Sql'])) {
+			$this->namespace['Sql'] = new Sql($this);
+		}
+		return $this->namespace['Sql'];
+	}
+
+
+	public function synonyms(): Synonyms
+	{
+		if (!isset($this->namespace['Synonyms'])) {
+			$this->namespace['Synonyms'] = new Synonyms($this);
+		}
+		return $this->namespace['Synonyms'];
+	}
+
+
+	public function tasks(): Tasks
+	{
+		if (!isset($this->namespace['Tasks'])) {
+			$this->namespace['Tasks'] = new Tasks($this);
+		}
+		return $this->namespace['Tasks'];
 	}
 
 

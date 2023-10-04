@@ -26,18 +26,18 @@ use Http\Promise\Promise;
 /**
  * @generated This file is generated, please do not edit
  */
-class Graph extends AbstractEndpoint
+class Tasks extends AbstractEndpoint
 {
 	/**
-	 * Explore extracted and summarized information about the documents and terms in an index.
+	 * Returns information about a task.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/graph-explore-api.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/tasks.html
 	 *
-	 * @param string|array $index Name of the index.
-	 * @param array|string $body The request body
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $task_id ID of the task.
 	 * @param array{
-	 *     routing: string, // Custom value used to route operations to a specific shard.
-	 *     timeout: string|integer, // Specifies the period of time to wait for a response from each shard.If no response is received before the timeout expires, the request fails and returns an error.Defaults to no timeout.
+	 *     timeout: string|integer, // Period to wait for a response.If no response is received before the timeout expires, the request fails and returns an error.
+	 *     wait_for_completion: bool, // If `true`, the request blocks until the task has completed.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -50,14 +50,13 @@ class Graph extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function explore(string|array $index, array|string $body = [], array $params = []): Elasticsearch|Promise
+	public function get(string $task_id, array $params = []): Elasticsearch|Promise
 	{
-		$index = $this->convertValue($index);
-		$url = '/' . $this->encode($index) . '/_graph/explore';
-		$method = empty($body) ? 'GET' : 'POST';
+		$url = '/_tasks/' . $this->encode($task_id) . '';
+		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
-			'routing',
 			'timeout',
+			'wait_for_completion',
 			'pretty',
 			'human',
 			'error_trace',
@@ -66,8 +65,7 @@ class Graph extends AbstractEndpoint
 		]);
 		$headers = [
 		    'Accept' => 'application/json',
-		    'Content-Type' => 'application/json'
 		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
 	}
 }

@@ -26,14 +26,15 @@ use Http\Promise\Promise;
 /**
  * @generated This file is generated, please do not edit
  */
-class Logstash extends AbstractEndpoint
+class QueryRuleset extends AbstractEndpoint
 {
 	/**
-	 * Deletes Logstash Pipelines used by Central Management
+	 * Deletes a query ruleset.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-delete-pipeline.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-query-ruleset.html
 	 *
-	 * @param string $id Identifier for the pipeline.
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $ruleset_id The unique identifier of the query ruleset to delete
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -47,9 +48,9 @@ class Logstash extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function deletePipeline(string $id, array $params = []): Elasticsearch|Promise
+	public function delete(string $ruleset_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_logstash/pipeline/' . $this->encode($id) . '';
+		$url = '/_query_rules/' . $this->encode($ruleset_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -60,11 +61,12 @@ class Logstash extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves Logstash Pipelines used by Central Management
+	 * Returns the details about a query ruleset.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-get-pipeline.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-query-ruleset.html
 	 *
-	 * @param string|array $id Comma-separated list of pipeline identifiers.
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $ruleset_id The unique identifier of the query ruleset
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -78,16 +80,10 @@ class Logstash extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function getPipeline(string|array $id, array $params = []): Elasticsearch|Promise
+	public function get(string $ruleset_id, array $params = []): Elasticsearch|Promise
 	{
-		$id = $this->convertValue($id);
-		if () {
-			$url = "/_logstash/pipeline";
-			$method = 'GET';
-		} else {
-			$url = '/_logstash/pipeline/' . $this->encode($id) . '';
-			$method = 'GET';
-		}
+		$url = '/_query_rules/' . $this->encode($ruleset_id) . '';
+		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
@@ -97,11 +93,45 @@ class Logstash extends AbstractEndpoint
 
 
 	/**
-	 * Adds and updates Logstash Pipelines used for Central Management
+	 * Lists query rulesets.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-put-pipeline.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/list-query-rulesets.html
 	 *
-	 * @param string $id Identifier for the pipeline.
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param array{
+	 *     from: integer, // Starting offset (default: 0)
+	 *     size: integer, // specifies a max number of results to get
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function list(array $params = []): Elasticsearch|Promise
+	{
+		$url = "/_query_rules";
+		$method = 'GET';
+		$url = $this->addQueryString($url, $params, ['from', 'size', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
+	}
+
+
+	/**
+	 * Creates or updates a query ruleset.
+	 *
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-query-ruleset.html
+	 *
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $ruleset_id The unique identifier of the query ruleset to be created or updated
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -116,9 +146,9 @@ class Logstash extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function putPipeline(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
+	public function put(string $ruleset_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_logstash/pipeline/' . $this->encode($id) . '';
+		$url = '/_query_rules/' . $this->encode($ruleset_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

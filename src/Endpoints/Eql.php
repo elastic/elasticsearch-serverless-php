@@ -26,18 +26,17 @@ use Http\Promise\Promise;
 /**
  * @generated This file is generated, please do not edit
  */
-class Ingest extends AbstractEndpoint
+class Eql extends AbstractEndpoint
 {
 	/**
-	 * Deletes a pipeline.
+	 * Deletes an async EQL search by ID. If the search is still running, the search request will be cancelled. Otherwise, the saved search results are deleted.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-pipeline-api.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/eql-search-api.html
 	 *
-	 * @param string $id Pipeline ID or wildcard expression of pipeline IDs used to limit the request.
-	 * To delete all ingest pipelines in a cluster, use a value of `*`.
+	 * @param string $id Identifier for the search to delete.
+	 * A search ID is provided in the EQL search API's response for an async search.
+	 * A search ID is also provided if the request’s `keep_on_completion` parameter is `true`.
 	 * @param array{
-	 *     master_timeout: string|integer, // Period to wait for a connection to the master node.If no response is received before the timeout expires, the request fails and returns an error.
-	 *     timeout: string|integer, // Period to wait for a response.If no response is received before the timeout expires, the request fails and returns an error.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -50,13 +49,46 @@ class Ingest extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function deletePipeline(string $id, array $params = []): Elasticsearch|Promise
+	public function delete(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ingest/pipeline/' . $this->encode($id) . '';
+		$url = '/_eql/search/' . $this->encode($id) . '';
 		$method = 'DELETE';
+		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
+	}
+
+
+	/**
+	 * Returns async results from previously executed Event Query Language (EQL) search
+	 *
+	 * @see  https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-search-api.html
+	 *
+	 * @param string $id Identifier for the search.
+	 * @param array{
+	 *     keep_alive: string|integer, // Period for which the search and its results are stored on the cluster.Defaults to the keep_alive value set by the search’s EQL search API request.
+	 *     wait_for_completion_timeout: string|integer, // Timeout duration to wait for the request to finish.Defaults to no timeout, meaning the request waits for complete search results.
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function get(string $id, array $params = []): Elasticsearch|Promise
+	{
+		$url = '/_eql/search/' . $this->encode($id) . '';
+		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
-			'master_timeout',
-			'timeout',
+			'keep_alive',
+			'wait_for_completion_timeout',
 			'pretty',
 			'human',
 			'error_trace',
@@ -71,58 +103,11 @@ class Ingest extends AbstractEndpoint
 
 
 	/**
-	 * Returns a pipeline.
+	 * Returns the status of a previously submitted async or stored Event Query Language (EQL) search
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-pipeline-api.html
+	 * @see  https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-status-api.html
 	 *
-	 * @param string $id Comma-separated list of pipeline IDs to retrieve.
-	 * Wildcard (`*`) expressions are supported.
-	 * To get all ingest pipelines, omit this parameter or use `*`.
-	 * @param array{
-	 *     master_timeout: string|integer, // Period to wait for a connection to the master node.If no response is received before the timeout expires, the request fails and returns an error.
-	 *     summary: bool, // Return pipelines without their definitions (default: false)
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function getPipeline(string $id = null, array $params = []): Elasticsearch|Promise
-	{
-		if (isset($id)) {
-			$url = '/_ingest/pipeline/' . $this->encode($id) . '';
-			$method = 'GET';
-		} else {
-			$url = "/_ingest/pipeline";
-			$method = 'GET';
-		}
-		$url = $this->addQueryString($url, $params, [
-			'master_timeout',
-			'summary',
-			'pretty',
-			'human',
-			'error_trace',
-			'source',
-			'filter_path',
-		]);
-		$headers = [
-		    'Accept' => 'application/json',
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
-	}
-
-
-	/**
-	 * Returns a list of the built-in patterns.
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/grok-processor.html
-	 *
+	 * @param string $id Identifier for the search.
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -136,9 +121,9 @@ class Ingest extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function processorGrok(array $params = []): Elasticsearch|Promise
+	public function getStatus(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = "/_ingest/processor/grok";
+		$url = '/_eql/search/status/' . $this->encode($id) . '';
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -149,16 +134,19 @@ class Ingest extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates a pipeline.
+	 * Returns results matching a query expressed in Event Query Language (EQL)
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/ingest.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/eql-search-api.html
 	 *
-	 * @param string $id ID of the ingest pipeline to create or update.
+	 * @param string|array $index The name of the index to scope the operation
 	 * @param array|string $body The request body
 	 * @param array{
-	 *     master_timeout: string|integer, // Period to wait for a connection to the master node. If no response is received before the timeout expires, the request fails and returns an error.
-	 *     timeout: string|integer, // Period to wait for a response. If no response is received before the timeout expires, the request fails and returns an error.
-	 *     if_version: integer, // Required version for optimistic concurrency control for pipeline updates
+	 *     allow_no_indices: bool, //
+	 *     expand_wildcards: string|array, //
+	 *     ignore_unavailable: bool, // If true, missing or closed indices are not included in the response.
+	 *     keep_alive: string|integer, // Period for which the search and its results are stored on the cluster.
+	 *     keep_on_completion: bool, // If true, the search and its results are stored on the cluster.
+	 *     wait_for_completion_timeout: string|integer, // Timeout duration to wait for the request to finish. Defaults to no timeout, meaning the request waits for complete search results.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -171,60 +159,24 @@ class Ingest extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function putPipeline(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
+	public function search(string|array $index, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ingest/pipeline/' . $this->encode($id) . '';
-		$method = 'PUT';
+		$index = $this->convertValue($index);
+		$url = '/' . $this->encode($index) . '/_eql/search';
+		$method = empty($body) ? 'GET' : 'POST';
 		$url = $this->addQueryString($url, $params, [
-			'master_timeout',
-			'timeout',
-			'if_version',
+			'allow_no_indices',
+			'expand_wildcards',
+			'ignore_unavailable',
+			'keep_alive',
+			'keep_on_completion',
+			'wait_for_completion_timeout',
 			'pretty',
 			'human',
 			'error_trace',
 			'source',
 			'filter_path',
 		]);
-		$headers = [
-		    'Accept' => 'application/json',
-		    'Content-Type' => 'application/json'
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
-	}
-
-
-	/**
-	 * Allows to simulate a pipeline with example documents.
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/simulate-pipeline-api.html
-	 *
-	 * @param string $id Pipeline to test.
-	 * If you don’t specify a `pipeline` in the request body, this parameter is required.
-	 * @param array|string $body The request body
-	 * @param array{
-	 *     verbose: bool, // If `true`, the response includes output data for each processor in the executed pipeline.
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function simulate(string $id = null, array|string $body = [], array $params = []): Elasticsearch|Promise
-	{
-		if (isset($id)) {
-			$url = '/_ingest/pipeline/' . $this->encode($id) . '/_simulate';
-			$method = empty($body) ? 'GET' : 'POST';
-		} else {
-			$url = "/_ingest/pipeline/_simulate";
-			$method = empty($body) ? 'GET' : 'POST';
-		}
-		$url = $this->addQueryString($url, $params, ['verbose', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
 		    'Content-Type' => 'application/json'

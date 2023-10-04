@@ -49,7 +49,7 @@ class AsyncSearch extends AbstractEndpoint
 	 */
 	public function delete(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_async_search/{$id}");
+		$url = '/_async_search/' . $this->encode($id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -83,7 +83,7 @@ class AsyncSearch extends AbstractEndpoint
 	 */
 	public function get(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_async_search/{$id}");
+		$url = '/_async_search/' . $this->encode($id) . '';
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'keep_alive',
@@ -123,7 +123,7 @@ class AsyncSearch extends AbstractEndpoint
 	 */
 	public function status(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_async_search/status/{$id}");
+		$url = '/_async_search/status/' . $this->encode($id) . '';
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -207,7 +207,7 @@ class AsyncSearch extends AbstractEndpoint
 	{
 		$index = $this->convertValue($index);
 		if (isset($index)) {
-			$url = $this->encode("/{$index}/_async_search");
+			$url = '/' . $this->encode($index) . '/_async_search';
 			$method = 'POST';
 		} else {
 			$url = "/_async_search";

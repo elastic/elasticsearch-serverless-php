@@ -53,7 +53,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function closeJob(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}/_close");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/_close';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_match',
@@ -94,7 +94,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteCalendar(string $calendar_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/calendars/{$calendar_id}");
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -109,8 +109,9 @@ class Ml extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/ml-delete-calendar-event.html
 	 *
-	 * @param string $calendar_id The ID of the calendar to modify
-	 * @param string $event_id The ID of the event to remove from the calendar
+	 * @param string $calendar_id A string that uniquely identifies a calendar.
+	 * @param string $event_id Identifier for the scheduled event.
+	 * You can obtain this identifier by using the get calendar events API.
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -126,7 +127,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteCalendarEvent(string $calendar_id, string $event_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/calendars/{$calendar_id}/events/{$event_id}");
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/events/' . $this->encode($event_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -164,7 +165,7 @@ class Ml extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		$job_id = $this->convertValue($job_id);
-		$url = $this->encode("/_ml/calendars/{$calendar_id}/jobs/{$job_id}");
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/jobs/' . $this->encode($job_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -197,7 +198,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteDataFrameAnalytics(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/data_frame/analytics/{$id}");
+		$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'force',
@@ -240,7 +241,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteDatafeed(string $datafeed_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/datafeeds/{$datafeed_id}");
+		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['force', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -271,7 +272,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteFilter(string $filter_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/filters/{$filter_id}");
+		$url = '/_ml/filters/' . $this->encode($filter_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -305,7 +306,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteJob(string $job_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'force',
@@ -346,7 +347,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteTrainedModel(string $model_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['force', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -382,7 +383,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}/model_aliases/{$model_alias}");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/model_aliases/' . $this->encode($model_alias) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -484,7 +485,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function flushJob(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}/_flush");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/_flush';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'advance_time',
@@ -532,7 +533,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function getCalendarEvents(string $calendar_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/calendars/{$calendar_id}/events");
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/events';
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'end',
@@ -582,7 +583,7 @@ class Ml extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		if (isset($calendar_id)) {
-			$url = $this->encode("/_ml/calendars/{$calendar_id}");
+			$url = '/_ml/calendars/' . $this->encode($calendar_id) . '';
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = "/_ml/calendars";
@@ -625,7 +626,7 @@ class Ml extends AbstractEndpoint
 	public function getDataFrameAnalytics(string $id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = $this->encode("/_ml/data_frame/analytics/{$id}");
+			$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/data_frame/analytics";
@@ -677,7 +678,7 @@ class Ml extends AbstractEndpoint
 	public function getDataFrameAnalyticsStats(string $id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = $this->encode("/_ml/data_frame/analytics/{$id}/_stats");
+			$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '/_stats';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/data_frame/analytics/_stats";
@@ -727,7 +728,7 @@ class Ml extends AbstractEndpoint
 	{
 		$datafeed_id = $this->convertValue($datafeed_id);
 		if (isset($datafeed_id)) {
-			$url = $this->encode("/_ml/datafeeds/{$datafeed_id}/_stats");
+			$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '/_stats';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/datafeeds/_stats";
@@ -768,7 +769,7 @@ class Ml extends AbstractEndpoint
 	{
 		$datafeed_id = $this->convertValue($datafeed_id);
 		if (isset($datafeed_id)) {
-			$url = $this->encode("/_ml/datafeeds/{$datafeed_id}");
+			$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/datafeeds";
@@ -815,7 +816,7 @@ class Ml extends AbstractEndpoint
 	{
 		$filter_id = $this->convertValue($filter_id);
 		if (isset($filter_id)) {
-			$url = $this->encode("/_ml/filters/{$filter_id}");
+			$url = '/_ml/filters/' . $this->encode($filter_id) . '';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/filters";
@@ -855,7 +856,7 @@ class Ml extends AbstractEndpoint
 	public function getJobStats(string $job_id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($job_id)) {
-			$url = $this->encode("/_ml/anomaly_detectors/{$job_id}/_stats");
+			$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/_stats';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/anomaly_detectors/_stats";
@@ -896,7 +897,7 @@ class Ml extends AbstractEndpoint
 	{
 		$job_id = $this->convertValue($job_id);
 		if (isset($job_id)) {
-			$url = $this->encode("/_ml/anomaly_detectors/{$job_id}");
+			$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/anomaly_detectors";
@@ -952,7 +953,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function getOverallBuckets(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}/results/overall_buckets");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/results/overall_buckets';
 		$method = empty($body) ? 'GET' : 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_match',
@@ -1005,7 +1006,7 @@ class Ml extends AbstractEndpoint
 	public function getTrainedModels(string $model_id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($model_id)) {
-			$url = $this->encode("/_ml/trained_models/{$model_id}");
+			$url = '/_ml/trained_models/' . $this->encode($model_id) . '';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/trained_models";
@@ -1059,7 +1060,7 @@ class Ml extends AbstractEndpoint
 	{
 		$model_id = $this->convertValue($model_id);
 		if (isset($model_id)) {
-			$url = $this->encode("/_ml/trained_models/{$model_id}/_stats");
+			$url = '/_ml/trained_models/' . $this->encode($model_id) . '/_stats';
 			$method = 'GET';
 		} else {
 			$url = "/_ml/trained_models/_stats";
@@ -1079,6 +1080,44 @@ class Ml extends AbstractEndpoint
 		    'Accept' => 'application/json',
 		];
 		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
+	}
+
+
+	/**
+	 * Evaluate a trained model.
+	 *
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/infer-trained-model.html
+	 *
+	 * @param string $model_id The unique identifier of the trained model.
+	 * @param array|string $body The request body
+	 * @param array{
+	 *     timeout: string|integer, // Controls the amount of time to wait for inference results.
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function inferTrainedModel(
+		string $model_id,
+		array|string $body = [],
+		array $params = [],
+	): Elasticsearch|Promise
+	{
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/_infer';
+		$method = 'POST';
+		$url = $this->addQueryString($url, $params, ['timeout', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
 	}
 
 
@@ -1105,7 +1144,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function openJob(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}/_open");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/_open';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['timeout', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1142,7 +1181,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/calendars/{$calendar_id}/events");
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/events';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1180,7 +1219,7 @@ class Ml extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = $this->encode("/_ml/data_frame/analytics/{$id}/_preview");
+			$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '/_preview';
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = "/_ml/data_frame/analytics/_preview";
@@ -1227,7 +1266,7 @@ class Ml extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		if (isset($datafeed_id)) {
-			$url = $this->encode("/_ml/datafeeds/{$datafeed_id}/_preview");
+			$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '/_preview';
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = "/_ml/datafeeds/_preview";
@@ -1264,7 +1303,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putCalendar(string $calendar_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/calendars/{$calendar_id}");
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1297,7 +1336,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putCalendarJob(string $calendar_id, string $job_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/calendars/{$calendar_id}/jobs/{$job_id}");
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/jobs/' . $this->encode($job_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1331,7 +1370,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putDataFrameAnalytics(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/data_frame/analytics/{$id}");
+		$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1370,7 +1409,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putDatafeed(string $datafeed_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/datafeeds/{$datafeed_id}");
+		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_indices',
@@ -1413,7 +1452,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putFilter(string $filter_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/filters/{$filter_id}");
+		$url = '/_ml/filters/' . $this->encode($filter_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1446,7 +1485,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putJob(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1480,7 +1519,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putTrainedModel(string $model_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'defer_definition_decompression',
@@ -1525,7 +1564,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}/model_aliases/{$model_alias}");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/model_aliases/' . $this->encode($model_alias) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['reassign', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1565,7 +1604,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}/definition/{$part}");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/definition/' . $this->encode($part) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1602,7 +1641,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}/vocabulary");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/vocabulary';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1636,7 +1675,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function resetJob(string $job_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}/_reset");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/_reset';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'wait_for_completion',
@@ -1678,7 +1717,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function startDataFrameAnalytics(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/data_frame/analytics/{$id}/_start");
+		$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '/_start';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['timeout', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1720,7 +1759,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/datafeeds/{$datafeed_id}/_start");
+		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '/_start';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'end',
@@ -1768,7 +1807,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function startTrainedModelDeployment(string $model_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}/deployment/_start");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/deployment/_start';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'cache_size',
@@ -1818,7 +1857,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function stopDataFrameAnalytics(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/data_frame/analytics/{$id}/_stop");
+		$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '/_stop';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_match',
@@ -1865,7 +1904,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function stopDatafeed(string $datafeed_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/datafeeds/{$datafeed_id}/_stop");
+		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '/_stop';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_match',
@@ -1908,7 +1947,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function stopTrainedModelDeployment(string $model_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/trained_models/{$model_id}/deployment/_stop");
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/deployment/_stop';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_match',
@@ -1955,7 +1994,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/data_frame/analytics/{$id}/_update");
+		$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '/_update';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1998,7 +2037,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/datafeeds/{$datafeed_id}/_update");
+		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '/_update';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_indices',
@@ -2041,7 +2080,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function updateFilter(string $filter_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/filters/{$filter_id}/_update");
+		$url = '/_ml/filters/' . $this->encode($filter_id) . '/_update';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -2074,7 +2113,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function updateJob(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_ml/anomaly_detectors/{$job_id}/_update");
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/_update';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

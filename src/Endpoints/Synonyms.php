@@ -26,14 +26,15 @@ use Http\Promise\Promise;
 /**
  * @generated This file is generated, please do not edit
  */
-class SearchApplication extends AbstractEndpoint
+class Synonyms extends AbstractEndpoint
 {
 	/**
-	 * Deletes a search application.
+	 * Deletes a synonym set
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-search-application.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-synonyms-set.html
 	 *
-	 * @param string $name The name of the search application to delete
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $id The id of the synonyms set to be deleted
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -47,9 +48,9 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function delete(string $name, array $params = []): Elasticsearch|Promise
+	public function deleteSynonym(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
+		$url = '/_synonyms/' . $this->encode($id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -60,12 +61,13 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Delete a behavioral analytics collection.
+	 * Deletes a synonym rule in a synonym set
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-analytics-collection.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-synonym-rule.html
 	 *
 	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
-	 * @param string $name The name of the analytics collection to be deleted
+	 * @param string $set_id The id of the synonym set to be updated
+	 * @param string $rule_id The id of the synonym rule to be deleted
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -79,56 +81,61 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function deleteBehavioralAnalytics(string $name, array $params = []): Elasticsearch|Promise
+	public function deleteSynonymRule(string $set_id, string $rule_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/analytics/' . $this->encode($name) . '';
+		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
 		];
 		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
 	}
 
 
 	/**
-	 * Returns the details about a search application.
+	 * Retrieves a synonym set
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-search-application.html
-	 *
-	 * @param string $name The name of the search application
-	 * @param array{
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function get(string $name, array $params = []): Elasticsearch|Promise
-	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
-		$method = 'GET';
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
-		$headers = [
-		    'Accept' => 'application/json',
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
-	}
-
-
-	/**
-	 * Returns the existing behavioral analytics collections.
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/list-analytics-collection.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-synonyms-set.html
 	 *
 	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
-	 * @param array $name A list of analytics collections to limit the returned information
+	 * @param string $id "The id of the synonyms set to be retrieved
+	 * @param array{
+	 *     from: integer, // Starting offset for query rules to be retrieved
+	 *     size: integer, // specifies a max number of query rules to retrieve
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function getSynonym(string $id, array $params = []): Elasticsearch|Promise
+	{
+		$url = '/_synonyms/' . $this->encode($id) . '';
+		$method = 'GET';
+		$url = $this->addQueryString($url, $params, ['from', 'size', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
+	}
+
+
+	/**
+	 * Retrieves a synonym rule from a synonym set
+	 *
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-synonym-rule.html
+	 *
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $set_id The id of the synonym set to retrieve the synonym rule from
+	 * @param string $rule_id The id of the synonym rule to retrieve
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -142,33 +149,28 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function getBehavioralAnalytics(array $name = null, array $params = []): Elasticsearch|Promise
+	public function getSynonymRule(string $set_id, string $rule_id, array $params = []): Elasticsearch|Promise
 	{
-		$name = $this->convertValue($name);
-		if (isset($name)) {
-			$url = '/_application/analytics/' . $this->encode($name) . '';
-			$method = 'GET';
-		} else {
-			$url = "/_application/analytics";
-			$method = 'GET';
-		}
+		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id) . '';
+		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
 		];
 		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
 	}
 
 
 	/**
-	 * Returns the existing search applications.
+	 * Retrieves a summary of all defined synonym sets
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/list-search-applications.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/list-synonyms-sets.html
 	 *
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param array{
-	 *     q: string, // Query in the Lucene query string syntax.
-	 *     from: integer, // Starting offset.
-	 *     size: integer, // Specifies a max number of results to get.
+	 *     from: integer, // Starting offset
+	 *     size: integer, // specifies a max number of results to get
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -181,20 +183,11 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function list(array $params = []): Elasticsearch|Promise
+	public function getSynonymsSets(array $params = []): Elasticsearch|Promise
 	{
-		$url = "/_application/search_application";
+		$url = "/_synonyms";
 		$method = 'GET';
-		$url = $this->addQueryString($url, $params, [
-			'q',
-			'from',
-			'size',
-			'pretty',
-			'human',
-			'error_trace',
-			'source',
-			'filter_path',
-		]);
+		$url = $this->addQueryString($url, $params, ['from', 'size', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
 		];
@@ -203,14 +196,14 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates a search application.
+	 * Creates or updates a synonyms set
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-search-application.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-synonyms-set.html
 	 *
-	 * @param string $name The name of the search application to be created or updated.
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $id The id of the synonyms set to be created or updated
 	 * @param array|string $body The request body
 	 * @param array{
-	 *     create: bool, // If `true`, this request cannot replace or update existing Search Applications.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -223,11 +216,11 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function put(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
+	public function putSynonym(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
+		$url = '/_synonyms/' . $this->encode($id) . '';
 		$method = 'PUT';
-		$url = $this->addQueryString($url, $params, ['create', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
 		    'Content-Type' => 'application/json'
@@ -237,43 +230,13 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Creates a behavioral analytics collection.
+	 * Creates or updates a synonym rule in a synonym set
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-analytics-collection.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-synonym-rule.html
 	 *
 	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
-	 * @param string $name The name of the analytics collection to be created or updated.
-	 * @param array{
-	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
-	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
-	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
-	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
-	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
-	 * } $params
-	 * @return Elasticsearch|Promise
-	 *
-	 * @throws NoNodeAvailableException if all the hosts are offline
-	 * @throws ClientResponseException if the status code of response is 4xx
-	 * @throws ServerResponseException if the status code of response is 5xx
-	 */
-	public function putBehavioralAnalytics(string $name, array $params = []): Elasticsearch|Promise
-	{
-		$url = '/_application/analytics/' . $this->encode($name) . '';
-		$method = 'PUT';
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
-		$headers = [
-		    'Accept' => 'application/json',
-		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
-	}
-
-
-	/**
-	 * Perform a search against a search application
-	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-application-search.html
-	 *
-	 * @param string $name The name of the search application to be searched.
+	 * @param string $set_id The id of the synonym set to be updated with the synonym rule
+	 * @param string $rule_id The id of the synonym rule to be updated or created
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -288,10 +251,15 @@ class SearchApplication extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function search(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
+	public function putSynonymRule(
+		string $set_id,
+		string $rule_id,
+		array|string $body = [],
+		array $params = [],
+	): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '/_search';
-		$method = empty($body) ? 'GET' : 'POST';
+		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id) . '';
+		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',

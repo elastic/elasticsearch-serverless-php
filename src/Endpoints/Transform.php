@@ -51,7 +51,7 @@ class Transform extends AbstractEndpoint
 	 */
 	public function deleteTransform(string $transform_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_transform/{$transform_id}");
+		$url = '/_transform/' . $this->encode($transform_id) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'force',
@@ -99,7 +99,7 @@ class Transform extends AbstractEndpoint
 	{
 		$transform_id = $this->convertValue($transform_id);
 		if (isset($transform_id)) {
-			$url = $this->encode("/_transform/{$transform_id}");
+			$url = '/_transform/' . $this->encode($transform_id) . '';
 			$method = 'GET';
 		} else {
 			$url = "/_transform";
@@ -152,7 +152,7 @@ class Transform extends AbstractEndpoint
 	public function getTransformStats(string|array $transform_id, array $params = []): Elasticsearch|Promise
 	{
 		$transform_id = $this->convertValue($transform_id);
-		$url = $this->encode("/_transform/{$transform_id}/_stats");
+		$url = '/_transform/' . $this->encode($transform_id) . '/_stats';
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_match',
@@ -201,7 +201,7 @@ class Transform extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		if (isset($transform_id)) {
-			$url = $this->encode("/_transform/{$transform_id}/_preview");
+			$url = '/_transform/' . $this->encode($transform_id) . '/_preview';
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = "/_transform/_preview";
@@ -245,7 +245,7 @@ class Transform extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_transform/{$transform_id}");
+		$url = '/_transform/' . $this->encode($transform_id) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'defer_validation',
@@ -287,7 +287,7 @@ class Transform extends AbstractEndpoint
 	 */
 	public function resetTransform(string $transform_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_transform/{$transform_id}/_reset");
+		$url = '/_transform/' . $this->encode($transform_id) . '/_reset';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['force', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -319,7 +319,7 @@ class Transform extends AbstractEndpoint
 	 */
 	public function scheduleNowTransform(string $transform_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_transform/{$transform_id}/_schedule_now");
+		$url = '/_transform/' . $this->encode($transform_id) . '/_schedule_now';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['timeout', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -353,7 +353,7 @@ class Transform extends AbstractEndpoint
 	 */
 	public function startTransform(string $transform_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_transform/{$transform_id}/_start");
+		$url = '/_transform/' . $this->encode($transform_id) . '/_start';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'timeout',
@@ -398,7 +398,7 @@ class Transform extends AbstractEndpoint
 	 */
 	public function stopTransform(string $transform_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_transform/{$transform_id}/_stop");
+		$url = '/_transform/' . $this->encode($transform_id) . '/_stop';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_match',
@@ -447,7 +447,7 @@ class Transform extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_transform/{$transform_id}/_update");
+		$url = '/_transform/' . $this->encode($transform_id) . '/_update';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'defer_validation',

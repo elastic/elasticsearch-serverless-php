@@ -33,7 +33,7 @@ class Enrich extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-enrich-policy-api.html
 	 *
-	 * @param string $name The name of the enrich policy
+	 * @param string $name Enrich policy to delete.
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -49,7 +49,7 @@ class Enrich extends AbstractEndpoint
 	 */
 	public function deletePolicy(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_enrich/policy/{$name}");
+		$url = '/_enrich/policy/' . $this->encode($name) . '';
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -62,11 +62,11 @@ class Enrich extends AbstractEndpoint
 	/**
 	 * Creates the enrich index for an existing enrich policy.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/execute-enrich-policy-api.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/execute-enrich-policy-api.html
 	 *
-	 * @param string $name The name of the enrich policy
+	 * @param string $name Enrich policy to execute.
 	 * @param array{
-	 *     wait_for_completion: bool, // Should the request should block until the execution is complete.
+	 *     wait_for_completion: bool, // If `true`, the request blocks other enrich policy execution requests until complete.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -81,7 +81,7 @@ class Enrich extends AbstractEndpoint
 	 */
 	public function executePolicy(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_enrich/policy/{$name}/_execute");
+		$url = '/_enrich/policy/' . $this->encode($name) . '/_execute';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'wait_for_completion',
@@ -103,7 +103,8 @@ class Enrich extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/get-enrich-policy-api.html
 	 *
-	 * @param string|array $name A comma-separated list of enrich policy names
+	 * @param string|array $name Comma-separated list of enrich policy names used to limit the request.
+	 * To return information for all enrich policies, omit this parameter.
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -121,7 +122,7 @@ class Enrich extends AbstractEndpoint
 	{
 		$name = $this->convertValue($name);
 		if (isset($name)) {
-			$url = $this->encode("/_enrich/policy/{$name}");
+			$url = '/_enrich/policy/' . $this->encode($name) . '';
 			$method = 'GET';
 		} else {
 			$url = "/_enrich/policy";
@@ -138,9 +139,9 @@ class Enrich extends AbstractEndpoint
 	/**
 	 * Creates a new enrich policy.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/put-enrich-policy-api.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/put-enrich-policy-api.html
 	 *
-	 * @param string $name The name of the enrich policy
+	 * @param string $name Name of the enrich policy to create or update.
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -157,7 +158,7 @@ class Enrich extends AbstractEndpoint
 	 */
 	public function putPolicy(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = $this->encode("/_enrich/policy/{$name}");
+		$url = '/_enrich/policy/' . $this->encode($name) . '';
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

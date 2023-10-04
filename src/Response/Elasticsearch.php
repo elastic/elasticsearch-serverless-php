@@ -33,7 +33,7 @@ use Psr\Http\Message\ResponseInterface;
 class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayAccess
 {
     const HEADER_CHECK = 'X-Elastic-Product';
-    const PRODUCT_NAME = 'ES-serverless';
+    const PRODUCT_NAME = 'Elasticsearch';
 
     use ProductCheckTrait;
     use MessageResponseTrait;

@@ -26,7 +26,6 @@ use Elastic\Elasticsearch\Transport\RequestOptions;
 use Elastic\Transport\Exception\NoAsyncClientException;
 use Elastic\Transport\Transport;
 use Elastic\Transport\TransportBuilder;
-use GuzzleHttp\Client as GuzzleHttpClient;
 use Http\Client\HttpAsyncClient;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
@@ -136,7 +135,7 @@ class ClientBuilder
      *                     ignore unknown settings
      * @throws ConfigException
      */
-    public static function fromConfig(array $config, bool $quiet = false): ClientInterface
+    public static function fromConfig(array $config, bool $quiet = false): ServerlessClientInterface
     {
         $builder = new static;
         foreach ($config as $key => $value) {
@@ -281,14 +280,14 @@ class ClientBuilder
     /**
      * Build and returns the Client object
      */
-    public function build(): Client
+    public function build(): ServerlessClientInterface
     {
         // Transport builder
         $builder = TransportBuilder::create();
 
         // Set the default hosts if empty
         if (empty($this->host)) {
-            throw new MissingParameterException('You need specify the serverleess endpoint (host)');
+            throw new MissingParameterException('You need specify the serverless endpoint (host)');
         }
         $builder->setHosts([$this->host]);
 
