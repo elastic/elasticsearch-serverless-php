@@ -40,7 +40,9 @@ class ClientBuilderTest extends TestCase
         $this->logger = $this->createStub(LoggerInterface::class);
         $this->nodePool = $this->createStub(NodePoolInterface::class);
         $this->psr17Factory = new Psr17Factory();
-        $this->builder = ClientBuilder::create();
+        $this->builder = ClientBuilder::create()
+            ->setHost('xxx.elastic.cloud:443')
+            ->setApiKey('apikey-value');
     }
 
     public function testCreate()
@@ -52,22 +54,14 @@ class ClientBuilderTest extends TestCase
     {
         return [
             [[
-                'hosts' => ['localhost:9200']
-            ]],
-            [[
-                'hosts'  => ['cloud:9200'],
-                'apiKey' => ['id-value', 'apikey-value']
-            ]],
-            [[
-                'hosts'  => ['cloud:9200'],
-                'basicAuthentication' => ['username-value', 'password-value']
+                'host'   => 'xxx.elastic.cloud:443',
+                'apiKey' => 'apikey-value'
             ]]
         ];
     }
 
     /**
      * @dataProvider getConfig
-     * @see https://github.com/elastic/elasticsearch-serverless-php/issues/1074
      */
     public function testFromConfigWithQuietFalse(array $params)
     {
@@ -91,7 +85,9 @@ class ClientBuilderTest extends TestCase
         $config = [
             'httpClient' => $this->httpClient,
             'logger' => $this->logger,
-            'foo' => 'bar'
+            'foo' => 'bar',
+            'host'   => 'xxx.elastic.cloud:443',
+            'apiKey' => 'apikey-value'
         ];
         $client = ClientBuilder::fromConfig($config, true);
         $this->assertInstanceOf(Client::class, $client);
@@ -120,9 +116,9 @@ class ClientBuilderTest extends TestCase
         $this->assertEquals($this->builder, $result);
     }
 
-    public function testSetHosts()
+    public function testSetHost()
     {
-        $result = $this->builder->setHosts(['localhost:9200']);
+        $result = $this->builder->setHost('yyy.elastic.cloud:443');
         $this->assertEquals($this->builder, $result);
     }
 
@@ -159,7 +155,8 @@ class ClientBuilderTest extends TestCase
 
     public function testSetApiKeyWithIdSetAuthorizationHeaderWithBase64()
     {
-        $this->builder->setApiKey('xxx', 'yyy');
+        $apiKey = 'xxx';
+        $this->builder->setApiKey($apiKey);
 
         $response = $this->psr17Factory->createResponse(200);
         $this->httpClient->method('sendRequest')
@@ -173,42 +170,7 @@ class ClientBuilderTest extends TestCase
         $request = $this->psr17Factory->createRequest('GET', 'localhost:9200');
         $transport->sendRequest($request);
 
-        $auth = base64_encode('yyy:xxx');
-        $this->assertContains("ApiKey $auth", $transport->getLastRequest()->getHeader('Authorization'));
-    }
-
-    public function testSetBasicAuthentication()
-    {
-        $result = $this->builder->setBasicAuthentication('user', 'pass');
-        $this->assertEquals($this->builder, $result);
-    }
-
-    public function testSetBasicAuthenticationSetAuthorizationHeader()
-    {
-        $this->builder->setBasicAuthentication('user', 'pass');
-
-        $response = $this->psr17Factory->createResponse(200);
-        $this->httpClient->method('sendRequest')
-             ->willReturn($response);
-        $this->builder->setHttpClient($this->httpClient);
-        
-        $client = $this->builder->build();
-        $this->assertInstanceOf(Client::class, $client);
-        
-        $transport = $client->getTransport();
-        $request = $this->psr17Factory->createRequest('GET', 'localhost:9200');
-        $transport->sendRequest($request);
-
-        $this->assertEquals("user:pass", $transport->getLastRequest()->getUri()->getUserInfo());
-    }
-
-    public function testSetBasicAuthenticationAndApiKeyThrowsException()
-    {
-        $this->builder->setBasicAuthentication('user', 'pass');
-        $this->builder->setApiKey('xxx', 'yyy');
-
-        $this->expectException(AuthenticationException::class);
-        $client = $this->builder->build();
+        $this->assertContains("ApiKey $apiKey", $transport->getLastRequest()->getHeader('Authorization'));
     }
 
     public function testSetElasticCloudId()
@@ -331,8 +293,7 @@ class ClientBuilderTest extends TestCase
     public function testClientWithSymfonyPsr18Client()
     {
         $symfonyClient = new Psr18Client();
-        $client = ClientBuilder::create()
-            ->setHttpClient($symfonyClient)
+        $client = $this->builder->setHttpClient($symfonyClient)
             ->build();
 
         $this->assertInstanceOf(Client::class, $client);
@@ -342,8 +303,7 @@ class ClientBuilderTest extends TestCase
     public function testClientWithSymfonyHttplugClient()
     {
         $symfonyClient = new HttplugClient();
-        $client = ClientBuilder::create()
-            ->setHttpClient($symfonyClient)
+        $client = $this->builder->setHttpClient($symfonyClient)
             ->build();
 
         $this->assertInstanceOf(Client::class, $client);
@@ -353,8 +313,7 @@ class ClientBuilderTest extends TestCase
     public function testAsyncClientWithSymfonyHttplugClient()
     {
         $symfonyClient = new HttplugClient();
-        $client = ClientBuilder::create()
-            ->setAsyncHttpClient($symfonyClient)
+        $client = $this->builder->setAsyncHttpClient($symfonyClient)
             ->build();
 
         $this->assertInstanceOf(Client::class, $client);
