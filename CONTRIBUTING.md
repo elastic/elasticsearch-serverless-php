@@ -1,28 +1,32 @@
-Describe how to install the library for development purposes.
+## Contribute 🚀
 
-### Run Tests
+We welcome contributors to the project. Before you begin, some useful info...
 
++ If you want to contribute to this project you need to subscribe to a 
+  [Contributor Agreement](https://www.elastic.co/contributor-agreement).
++ Before opening a pull request, please create an issue to 
+  [discuss the scope of your proposal](https://github.com/elastic/elasticsearch-serverless-php/issues).
++ If you want to send a PR for version `8.0` please use the `8.0` branch, for 
+  `8.1` use the `8.1` branch and so on. 
++ Never send PR to `master` unless you want to contribute to the development 
+  version of the client (`master` represents the next major version).
++ Each PR should include a **unit test** using [PHPUnit](https://phpunit.de/). 
+  If you are not familiar with PHPUnit you can have a look at the 
+  [reference](https://phpunit.readthedocs.io/en/9.5/). 
 
+## Testing
 
-### Run Elasticsearch Serverless Docker container
+To execute the tests, you can use the following command:
 
+```bash
+composer run-script test
+```
 
+We also use [PHPStan](https://phpstan.org/) for code static analysis.
+Please remember to run this command before sending the PR:
 
-### Contributing Code Changes
+```bash
+composer run-script phpstan
+```
 
-1. Please make sure you have signed the [Contributor License
-   Agreement](http://www.elastic.co/contributor-agreement/). We are not
-   asking you to assign copyright to us, but to give us the right to distribute
-   your code without restriction. We ask this of all contributors in order to
-   assure our users of the origin and continuing existence of the code. You only
-   need to sign the CLA once.
-2. Rebase your changes. Update your local repository with the most recent code
-   from the main `elasticsearch-serverless-php` repository and rebase your branch
-   on top of the latest `main` branch.
-3. Submit a pull request. Push your local changes to your forked repository
-   and [submit a pull request](https://github.com/elastic/elasticsearch-serverless/pulls)
-   and mention the issue number if any (`Closes #123`) Make sure that you
-   add or modify tests related to your changes so that CI will pass.
-4. Sit back and wait. There may be some discussion on your pull request and
-   if changes are needed we would love to work with you to get your pull request
-   merged into `elasticsearch-serverless-php`.
+Thanks in advance for your contribution! :heart:
