@@ -1,20 +1,20 @@
 ---
 id: gettingStarted
 slug: /serverless-php/docs/getting-started
-title: Getting started with the Serverless Php client
-description: This page contains quickstart information about the Serverless Php client.
-date: 2023-04-27
-tags: ['serverless','Php client','docs', 'getting started']
+title: Getting started with the Serverless PHP client
+description: This page contains quickstart information about the Serverless PHP client.
+date: 2023-10-05
+tags: ['serverless','PHP client','docs', 'getting started']
 ---
 
-This page guides you through the installation process of the Serverless Php 
+This page guides you through the installation process of the Serverless PHP 
 client, shows you how to instantiate the client, and how to perform basic 
 Elasticsearch operations with it.
 
 
 ## Requirements
 
-* Php x or higher installed on your system.
+* PHP 8.0 or higher installed on your system.
 
 
 ## Installation
@@ -22,10 +22,12 @@ Elasticsearch operations with it.
 
 ### Using the command line
 
-You can install the Elasticsearch Serverless Php client with the following 
-commands:
+You can install the Elasticsearch Serverless PHP client using [composer](https://getcomposer.org/)
+with the following commands:
 
 ```bash
+composer require elastic/elasticsearch-serverless
+
 ```
 
 
@@ -34,16 +36,20 @@ commands:
 You can instantiate a client by running the following command:
 
 ```php
+require 'vendor/autoload.php';
 
+use Elastic\Elasticsearch\Serverless\ClientBuilder;
+
+$client = ClientBuilder::create()
+  ->setEndpoint('<elasticsearch-endpoint>')
+  ->setApiKey('<api-key>')
+  ->build();
 ```
 
-You can find the Elasticsearch endpoint on the Cloud deployment management page.
+You can find the Elasticsearch endpoint URL and API Key on the **Getting started** page
+in the **Project** cloud management page.
 
-<DocImage url="images/copy-endpoint.gif" alt="Copy the endpoint for Elasticsearch"/>
-
-You can create a new API Key under **Stack Management** > **Security**:
-
-<DocImage url="images/setup-api-key.gif" alt="Create and copy Apy Key"/>
+<DocImage url="images/endpoint_api_key.png" alt="Endpoint URL and API Key"/>
 
 
 ## Using the API
@@ -56,22 +62,72 @@ documents in one request.
 
 ### Creating an index and ingesting documents
 
-You can call the `bulk` API with a body parameter, an array of hashes that 
-define the action, and a document. 
+You can call the `bulk` API with a body parameter, an array of actions (index)
+and documents.
 
 The following is an example of indexing some classic books into the `books` 
 index:
 
 ```php
+$body = [
+    [ "index" => [ "_index" => "books" ]],
+    [ "name" => "Snow Crash", "author" => "Neal Stephenson", "release_date" => "1992-06-01", "page_count" => 470],
+    [ "index" => [ "_index" => "books" ]],
+    [ "name" => "Revelation Space", "author" => "Alastair Reynolds", "release_date" => "2000-03-15", "page_count" => 585],
+    [ "index" => [ "_index" => "books" ]],
+    [ "name" => "1984", "author" => "George Orwell", "release_date" => "1949-06-08", "page_count" => 328],
+    [ "index" => [ "_index" => "books" ]],
+    [ "name" => "Fahrenheit 451", "author" => "Ray Bradbury", "release_date" => "1953-10-15", "page_count" => 227],
+    [ "index" => [ "_index" => "books" ]],
+    [ "name" => "Brave New World", "author" => "Aldous Huxley", "release_date" => "1932-06-01", "page_count" => 268],
+    [ "index" => [ "_index" => "books" ]],
+    [ "name" => "The Handmaid's Tale", "author" => "Margaret Atwood", "release_date" => "1985-06-01", "page_count" => 311]
+];
+
+$response = $client->bulk(body: $body);
+# You can check the response if the items are indexed and have an ID
+print_r($response['items']);
 
 ```
 
 When you use the client to make a request to Elasticsearch, it returns an API 
-response object. You can check the HTTP return code by calling `status` and the 
-HTTP headers by calling `headers` on the response object. The response object 
-also behaves as a Hash, so you can access the body values directly as seen on 
-the previous example with ``.
+response object. This object implements the [PSR-7](https://www.php-fig.org/psr/psr-7/) interface,
+that means you can check the for the HTTP status using the following method:
 
+```php
+print($response->getStatusCode());
+```
+
+or get the HTTP response headers using the following:
+
+```php
+print_r($response->getHeaders());
+```
+
+or reading the HTTP response body as follows:
+
+```php
+print($response->getBody()->getContents());
+# or using the asString() dedicated method
+print($response->asString());
+``
+
+Moreover, the response body can be accessed as associative array or as object.
+
+```php
+var_dump($response['items']); # associative array
+var_dump($response->items);   # object
+```
+
+We provide also three methods to render the response as array, object, string
+and boolean values.
+
+```php
+var_dump($response->asArray());  // response body content as array
+var_dump($response->asObject()); // response body content as object
+var_dump($response->asString()); // response body as string (JSON)
+var_dump($response->asBool());   // true if HTTP response code between 200 and 300
+```
 
 ### Searching
 
@@ -79,4 +135,67 @@ Now that some data is available, you can search your documents using the
 **Search API**:
 
 ```php
+# Search for all the books written by Ray Bradbury
+$query = [ 'query' => [ 'match' => [ 'author' => 'Ray Bradbury' ]]];
+$response = $client->search(index: "books", body: $query);
+
+printf("Documents found: %d\n", $response['hits']['total']['value']); # total documents found
+print_r($response['hits']['hits']); # list of books
 ```
+
+For more information about the Search query parameters and the response type
+you can refer to the [Search API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html)
+documentation page of Elasticsearch.
+
+### Updating a document
+
+You can call the `update` API to update a document:
+
+```php
+$id = '<insert the document ID>';
+# update the "page_count" value to 300
+$body = [ "doc" => [ "page_count" => 300 ]];
+$response = $client->update(index: "books", id: $id, body: $body);
+printf("Operation result: %s\n", $response['result']); # You should read 'updated' as result
+```
+
+### Deleting a document
+
+You can call the `delete` API to delete a document:
+
+```php
+$id = '<insert the document ID>';
+$response = $client->delete(index: "books", id: $id);
+printf("Operation result: %s\n", $response['result']); # You should read "deleted" as result
+```
+
+If you try to get the document ID, you will get a `ClientResponseException` with a `404 Not Found`
+message, as follows:
+
+```php
+use Elastic\Elasticsearch\Serverless\Exception\ClientResponseException;
+
+$id = '<insert the document ID>';
+try {
+    $response = $client->get(index: "books", id: $id);
+} catch (ClientResponseException $e) {
+    printf("The document does not exist: %s\n", $e->getMessage());
+    printf("HTTP status code: %d\n", $e->getResponse()->getStatusCode());
+}
+printf("Operation result: %s\n", $response['result']); # You should read "deleted" as result
+```
+
+### Deleting an index
+
+You can delete an entire index as follows:
+
+```php
+$response = $client->indices()->delete(index: "books");
+if ($response['acknowledged']) {
+    print("Index successfully removed!");
+}
+```
+
+This operation is possible only if the associated API key has `delete_index`
+or [manage index privilege](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-privileges.html#privileges-list-indices)
+for the target index. 
