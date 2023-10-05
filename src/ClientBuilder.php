@@ -49,9 +49,9 @@ class ClientBuilder
     private LoggerInterface $logger;
 
     /**
-     * Serverless endpoint (host)
+     * Serverless endpoint (url)
      */
-    private string $host;
+    private string $endpoint;
 
     /**
      * Elasticsearch API key
@@ -181,11 +181,11 @@ class ClientBuilder
     }
 
     /**
-     * Set the serverless endpoint (host)
+     * Set the serverless endpoint (url)
      */
-    public function setHost(string $host): ClientBuilder
+    public function setEndpoint(string $endpoint): ClientBuilder
     {
-        $this->host = $host;
+        $this->endpoint = $endpoint;
         return $this;
     }
 
@@ -285,11 +285,11 @@ class ClientBuilder
         // Transport builder
         $builder = TransportBuilder::create();
 
-        // Set the default hosts if empty
-        if (empty($this->host)) {
-            throw new MissingParameterException('You need specify the serverless endpoint (host)');
+        // The endpoint must be set
+        if (empty($this->endpoint)) {
+            throw new MissingParameterException('You need specify the serverless endpoint (url)');
         }
-        $builder->setHosts([$this->host]);
+        $builder->setHosts([$this->endpoint]);
 
         // Logger
         if (!empty($this->logger)) {    

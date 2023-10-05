@@ -41,7 +41,7 @@ class ClientBuilderTest extends TestCase
         $this->nodePool = $this->createStub(NodePoolInterface::class);
         $this->psr17Factory = new Psr17Factory();
         $this->builder = ClientBuilder::create()
-            ->setHost('xxx.elastic.cloud:443')
+            ->setEndpoint('xxx.elastic.cloud:443')
             ->setApiKey('apikey-value');
     }
 
@@ -54,7 +54,7 @@ class ClientBuilderTest extends TestCase
     {
         return [
             [[
-                'host'   => 'xxx.elastic.cloud:443',
+                'endpoint'   => 'xxx.elastic.cloud:443',
                 'apiKey' => 'apikey-value'
             ]]
         ];
@@ -86,7 +86,7 @@ class ClientBuilderTest extends TestCase
             'httpClient' => $this->httpClient,
             'logger' => $this->logger,
             'foo' => 'bar',
-            'host'   => 'xxx.elastic.cloud:443',
+            'endpoint'   => 'xxx.elastic.cloud:443',
             'apiKey' => 'apikey-value'
         ];
         $client = ClientBuilder::fromConfig($config, true);
@@ -116,9 +116,9 @@ class ClientBuilderTest extends TestCase
         $this->assertEquals($this->builder, $result);
     }
 
-    public function testSetHost()
+    public function testsetEndpoint()
     {
-        $result = $this->builder->setHost('yyy.elastic.cloud:443');
+        $result = $this->builder->setEndpoint('yyy.elastic.cloud:443');
         $this->assertEquals($this->builder, $result);
     }
 
