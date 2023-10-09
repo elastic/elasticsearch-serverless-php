@@ -1599,7 +1599,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putTrainedModelDefinitionPart(
 		string $model_id,
-		\integer $part,
+		int $part,
 		array|string $body = [],
 		array $params = [],
 	): Elasticsearch|Promise

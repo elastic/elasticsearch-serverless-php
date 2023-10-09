@@ -1809,9 +1809,9 @@ trait ClientEndpointsTrait
 	public function searchMvt(
 		string|array $index,
 		string $field,
-		\integer $zoom,
-		\integer $x,
-		\integer $y,
+		int $zoom,
+		int $x,
+		int $y,
 		array|string $body = [],
 		array $params = [],
 	): Elasticsearch|Promise

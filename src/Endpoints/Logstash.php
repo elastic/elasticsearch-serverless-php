@@ -78,14 +78,14 @@ class Logstash extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function getPipeline(string|array $id, array $params = []): Elasticsearch|Promise
+	public function getPipeline(string|array $id = null, array $params = []): Elasticsearch|Promise
 	{
 		$id = $this->convertValue($id);
-		if () {
-			$url = "/_logstash/pipeline";
+		if (isset($id)) {
+			$url = '/_logstash/pipeline/' . $this->encode($id) . '';
 			$method = 'GET';
 		} else {
-			$url = '/_logstash/pipeline/' . $this->encode($id) . '';
+			$url = "/_logstash/pipeline";
 			$method = 'GET';
 		}
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);

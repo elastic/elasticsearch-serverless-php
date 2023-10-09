@@ -102,7 +102,6 @@ class SearchResponseIterator implements Iterator
     private function clearScroll(): void
     {
         if (!empty($this->scrollId)) {
-            /* @phpstan-ignore-next-line */
             $this->client->clearScroll(
                 [
                     'body' => [
@@ -129,7 +128,6 @@ class SearchResponseIterator implements Iterator
     {
         $this->clearScroll();
         $this->currentKey = 0;
-        /* @phpstan-ignore-next-line */
         $this->currentScrolledResponse = $this->client->search($this->params)->asArray();
         $this->scrollId = $this->currentScrolledResponse['_scroll_id'];
     }
@@ -144,7 +142,6 @@ class SearchResponseIterator implements Iterator
      */
     public function next(): void
     {
-        /* @phpstan-ignore-next-line */
         $this->currentScrolledResponse = $this->client->scroll(
             [
                 'body' => [
