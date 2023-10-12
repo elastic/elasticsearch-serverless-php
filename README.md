@@ -12,6 +12,16 @@ You can install the library using [composer](https://getcomposer.org/) with the 
 composer require elastic/elasticsearch-serverless
 ```
 
+You need specify the version, if you want to install an `aplha` or `rc` release, as follows:
+
+```bash
+composer require elastic/elasticsearch-serverless:0.1.0-alpha1
+```
+
+Please remember that `alpha` releases are quite unstable, the code can change between releases.
+Instead, a release candidate `rc` will not break the backward compatibility but with the possibility
+of having bugs to be fixed.
+
 ### Instantiate a Client
 
 When you have installed elasticsearch-php you can start using it with the `Client`` class.
@@ -33,7 +43,7 @@ $client = ClientBuilder::create()
 
 ### Usage
 
-You can read to the [official documentation]() 
+You can read to the [official documentation](https://docs.elastic.co/serverless/elasticsearch/php-client-getting-started) 
 page for a getting started guide.
 
 ## Development
