@@ -145,7 +145,7 @@ trait EndpointTrait
             $content = is_string($body) ? $body : $this->bodySerialize($body, $headers['Content-Type']);
             $request = $request->withBody($streamFactory->createStream($content));
         }
-        $headers = $this->buildCompatibilityHeaders($headers);
+        $headers = $this->buildApiVersion($headers);
 
         // Headers
         foreach ($headers as $name => $value) {
@@ -159,30 +159,14 @@ trait EndpointTrait
     }
 
     /**
-     * Build the API compatibility headers
-     * transfrom Content-Type and Accept adding vnd.elasticsearch+ and compatible-with
-     * 
-     * @see https://github.com/elastic/elasticsearch-serverless-php/pull/1142
+     * Build the API version header
      */
-    protected function buildCompatibilityHeaders(array $headers): array
+    protected function buildApiVersion(array $headers): array
     {
-        if (isset($headers['Content-Type'])) {
-            if (preg_match('/application\/([^,]+)$/', $headers['Content-Type'], $matches)) {
-                $headers['Content-Type'] = sprintf(Client::API_COMPATIBILITY_HEADER, 'application', $matches[1]);
-            }
-        }
-        if (isset($headers['Accept'])) {
-            $values = explode(',', $headers['Accept']);
-            foreach ($values as &$value) {
-                if (preg_match('/(application|text)\/([^,]+)/', $value, $matches)) { 
-                    $value = sprintf(Client::API_COMPATIBILITY_HEADER, $matches[1], $matches[2]);
-                }
-            }
-            $headers['Accept'] = implode(',', $values);
-        }
+        $headers[Client::API_VERSION_HEADER] = Client::API_VERSION;
         return $headers;
     }
-
+    
     /**
      * Check if the $required parameters are present in $params
      * @throws MissingParameterException
