@@ -66,34 +66,11 @@ class EndpointTraitTest extends TestCase
         $this->bodySerialize(['foo' => 'bar'], 'Unknown-content-type');
     }
 
-    public function getCompatibilityHeaders()
+    
+    public function testBuildApiVersion()
     {
-        return [
-            [['Content-Type' => 'application/json'], ['Content-Type' => sprintf(Client::API_COMPATIBILITY_HEADER, 'application', 'json')]],
-            [['Accept' => 'application/json'], ['Accept' => sprintf(Client::API_COMPATIBILITY_HEADER, 'application', 'json')]],
-            [['Content-Type' => 'application/x-ndjson'], ['Content-Type' => sprintf(Client::API_COMPATIBILITY_HEADER, 'application', 'x-ndjson')]],
-            [['Accept' => 'application/x-ndjson'], ['Accept' => sprintf(Client::API_COMPATIBILITY_HEADER, 'application', 'x-ndjson')]],
-            [['Content-Type' => 'application/text'], ['Content-Type' => sprintf(Client::API_COMPATIBILITY_HEADER, 'application', 'text')]],
-            [['Accept' => 'text/plain'], ['Accept' => sprintf(Client::API_COMPATIBILITY_HEADER, 'text', 'plain')]],
-            // Multiple values
-            [[
-                'Accept' => 'text/plain,application/json'
-            ], [
-                'Accept' => sprintf(
-                    "%s,%s", 
-                    sprintf(Client::API_COMPATIBILITY_HEADER, 'text', 'plain'), 
-                    sprintf(Client::API_COMPATIBILITY_HEADER, 'application', 'json')
-                )
-            ]],
-        ];
-    }
-
-    /**
-     * @dataProvider getCompatibilityHeaders
-     */
-    public function testBuildCompatibilityHeaders(array $input, array $expected)
-    {
-        $this->assertEquals($expected, $this->buildCompatibilityHeaders($input));
+        $headers = $this->buildApiVersion([]);
+        $this->assertEquals($headers[Client::API_VERSION_HEADER], Client::API_VERSION);
     }
 
     public function getRequestParts(): array
@@ -119,7 +96,7 @@ class EndpointTraitTest extends TestCase
         $host = parse_url($url, PHP_URL_HOST);
         $port = parse_url($url, PHP_URL_PORT);
         $this->assertEquals(empty($port) ? $host : $host . ':' . $port, $request->getHeader('Host')[0]);
-        $headers = $this->buildCompatibilityHeaders($headers);
+        $headers = $this->buildApiVersion($headers);
         foreach ($headers as $name => $value) {
             $header = $request->getHeader($name);
             $this->assertEquals($value, implode(',', $header));

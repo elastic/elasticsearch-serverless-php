@@ -13,15 +13,16 @@ You can install the library using [composer](https://getcomposer.org/) with the 
 composer require elastic/elasticsearch-serverless
 ```
 
-You need specify the version, if you want to install an `aplha` or `rc` release, as follows:
+You need specify the version, if you want to install an `alpha` or `rc` release.
+For instance, if you want to install the latest alpha version:
 
 ```bash
-composer require elastic/elasticsearch-serverless:0.1.0-alpha1
+composer require elastic/elasticsearch-serverless:*@alpha
 ```
 
 Please remember that `alpha` releases are quite unstable, the code can change between releases.
-Instead, a release candidate `rc` will not break the backward compatibility but with the possibility
-of having bugs to be fixed.
+Instead, a release candidate `rc` will not break the backward compatibility. Typically an `rc`
+version includes only bug fixes.
 
 ### Instantiate a Client
 
