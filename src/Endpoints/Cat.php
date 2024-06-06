@@ -52,7 +52,7 @@ class Cat extends AbstractEndpoint
 	{
 		$name = $this->convertValue($name);
 		if (isset($name)) {
-			$url = '/_cat/aliases/' . $this->encode($name) . '';
+			$url = '/_cat/aliases/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/aliases";
@@ -95,7 +95,7 @@ class Cat extends AbstractEndpoint
 	public function componentTemplates(string $name = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($name)) {
-			$url = '/_cat/component_templates/' . $this->encode($name) . '';
+			$url = '/_cat/component_templates/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/component_templates";
@@ -133,7 +133,7 @@ class Cat extends AbstractEndpoint
 	{
 		$index = $this->convertValue($index);
 		if (isset($index)) {
-			$url = '/_cat/count/' . $this->encode($index) . '';
+			$url = '/_cat/count/' . $this->encode($index);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/count";
@@ -207,7 +207,7 @@ class Cat extends AbstractEndpoint
 	{
 		$index = $this->convertValue($index);
 		if (isset($index)) {
-			$url = '/_cat/indices/' . $this->encode($index) . '';
+			$url = '/_cat/indices/' . $this->encode($index);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/indices";
@@ -260,7 +260,7 @@ class Cat extends AbstractEndpoint
 	public function mlDataFrameAnalytics(string $id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = '/_cat/ml/data_frame/analytics/' . $this->encode($id) . '';
+			$url = '/_cat/ml/data_frame/analytics/' . $this->encode($id);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/ml/data_frame/analytics";
@@ -311,7 +311,7 @@ class Cat extends AbstractEndpoint
 	public function mlDatafeeds(string $datafeed_id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($datafeed_id)) {
-			$url = '/_cat/ml/datafeeds/' . $this->encode($datafeed_id) . '';
+			$url = '/_cat/ml/datafeeds/' . $this->encode($datafeed_id);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/ml/datafeeds";
@@ -362,7 +362,7 @@ class Cat extends AbstractEndpoint
 	public function mlJobs(string $job_id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($job_id)) {
-			$url = '/_cat/ml/anomaly_detectors/' . $this->encode($job_id) . '';
+			$url = '/_cat/ml/anomaly_detectors/' . $this->encode($job_id);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/ml/anomaly_detectors";
@@ -398,8 +398,8 @@ class Cat extends AbstractEndpoint
 	 *     bytes: string, // The unit used to display byte values.
 	 *     h: string|array, // A comma-separated list of column names to display.
 	 *     s: string|array, // A comma-separated list of column names or aliases used to sort the response.
-	 *     from: integer, // Skips the specified number of transforms.
-	 *     size: integer, // The maximum number of transforms to display.
+	 *     from: int, // Skips the specified number of transforms.
+	 *     size: int, // The maximum number of transforms to display.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -415,7 +415,7 @@ class Cat extends AbstractEndpoint
 	public function mlTrainedModels(string $model_id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($model_id)) {
-			$url = '/_cat/ml/trained_models/' . $this->encode($model_id) . '';
+			$url = '/_cat/ml/trained_models/' . $this->encode($model_id);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/ml/trained_models";
@@ -450,11 +450,11 @@ class Cat extends AbstractEndpoint
 	 * If you do not specify one of these options, the API returns information for all transforms.
 	 * @param array{
 	 *     allow_no_match: bool, // Specifies what to do when the request: contains wildcard expressions and there are no transforms that match; contains the `_all` string or no identifiers and there are no matches; contains wildcard expressions and there are only partial matches.If `true`, it returns an empty transforms array when there are no matches and the subset of results when there are partial matches.If `false`, the request returns a 404 status code when there are no matches or only partial matches.
-	 *     from: integer, // Skips the specified number of transforms.
+	 *     from: int, // Skips the specified number of transforms.
 	 *     h: string|array, // Comma-separated list of column names to display.
 	 *     s: string|array, // Comma-separated list of column names or column aliases used to sort the response.
 	 *     time: string, // The unit used to display time values.
-	 *     size: integer, // The maximum number of transforms to obtain.
+	 *     size: int, // The maximum number of transforms to obtain.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -470,7 +470,7 @@ class Cat extends AbstractEndpoint
 	public function transforms(string $transform_id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($transform_id)) {
-			$url = '/_cat/transforms/' . $this->encode($transform_id) . '';
+			$url = '/_cat/transforms/' . $this->encode($transform_id);
 			$method = 'GET';
 		} else {
 			$url = "/_cat/transforms";

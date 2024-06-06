@@ -103,6 +103,8 @@ class Security extends AbstractEndpoint
 	 *     realm_name: string, // The name of an authentication realm.This parameter cannot be used with either `id` or `name` or when `owner` flag is set to `true`.
 	 *     username: string, // The username of a user.This parameter cannot be used with either `id` or `name` or when `owner` flag is set to `true`.
 	 *     with_limited_by: bool, // Return the snapshot of the owner user's role descriptorsassociated with the API key. An API key's actualpermission is the intersection of its assigned roledescriptors and the owner user's role descriptors.
+	 *     active_only: bool, // A boolean flag that can be used to query API keys that are currently active. An API key is considered active if it is neither invalidated, nor expired at query time. You can specify this together with other parameters such as `owner` or `name`. If `active_only` is false, the response will include both active and inactive (expired or invalidated) keys.
+	 *     with_profile_uid: bool, // Determines whether to also retrieve the profile uid, for the API key owner principal, if it exists.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -126,6 +128,8 @@ class Security extends AbstractEndpoint
 			'realm_name',
 			'username',
 			'with_limited_by',
+			'active_only',
+			'with_profile_uid',
 			'pretty',
 			'human',
 			'error_trace',
@@ -220,7 +224,9 @@ class Security extends AbstractEndpoint
 	 *
 	 * @param array|string $body The request body
 	 * @param array{
-	 *     with_limited_by: bool, // Return the snapshot of the owner user's role descriptors associated with the API key. An API key's actual permission is the intersection of its assigned role descriptors and the owner user's role descriptors.
+	 *     with_limited_by: bool, // Return the snapshot of the owner user's role descriptors associated with the API key.An API key's actual permission is the intersection of its assigned role descriptors and the owner user's role descriptors.
+	 *     with_profile_uid: bool, // Determines whether to also retrieve the profile uid, for the API key owner principal, if it exists.
+	 *     typed_keys: bool, // Determines whether aggregation names are prefixed by their respective types in the response.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -239,6 +245,8 @@ class Security extends AbstractEndpoint
 		$method = empty($body) ? 'GET' : 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'with_limited_by',
+			'with_profile_uid',
+			'typed_keys',
 			'pretty',
 			'human',
 			'error_trace',
@@ -275,7 +283,7 @@ class Security extends AbstractEndpoint
 	 */
 	public function updateApiKey(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_security/api_key/' . $this->encode($id) . '';
+		$url = '/_security/api_key/' . $this->encode($id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

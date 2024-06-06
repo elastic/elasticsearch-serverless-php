@@ -31,7 +31,7 @@ class SearchApplication extends AbstractEndpoint
 	/**
 	 * Deletes a search application.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-search-application.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-search-application.html
 	 *
 	 * @param string $name The name of the search application to delete
 	 * @param array{
@@ -49,7 +49,7 @@ class SearchApplication extends AbstractEndpoint
 	 */
 	public function delete(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
+		$url = '/_application/search_application/' . $this->encode($name);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -81,7 +81,7 @@ class SearchApplication extends AbstractEndpoint
 	 */
 	public function deleteBehavioralAnalytics(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/analytics/' . $this->encode($name) . '';
+		$url = '/_application/analytics/' . $this->encode($name);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -112,7 +112,7 @@ class SearchApplication extends AbstractEndpoint
 	 */
 	public function get(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
+		$url = '/_application/search_application/' . $this->encode($name);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -146,7 +146,7 @@ class SearchApplication extends AbstractEndpoint
 	{
 		$name = $this->convertValue($name);
 		if (isset($name)) {
-			$url = '/_application/analytics/' . $this->encode($name) . '';
+			$url = '/_application/analytics/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_application/analytics";
@@ -167,8 +167,8 @@ class SearchApplication extends AbstractEndpoint
 	 *
 	 * @param array{
 	 *     q: string, // Query in the Lucene query string syntax.
-	 *     from: integer, // Starting offset.
-	 *     size: integer, // Specifies a max number of results to get.
+	 *     from: int, // Starting offset.
+	 *     size: int, // Specifies a max number of results to get.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -225,7 +225,7 @@ class SearchApplication extends AbstractEndpoint
 	 */
 	public function put(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/search_application/' . $this->encode($name) . '';
+		$url = '/_application/search_application/' . $this->encode($name);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['create', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -258,7 +258,7 @@ class SearchApplication extends AbstractEndpoint
 	 */
 	public function putBehavioralAnalytics(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_application/analytics/' . $this->encode($name) . '';
+		$url = '/_application/analytics/' . $this->encode($name);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -276,6 +276,7 @@ class SearchApplication extends AbstractEndpoint
 	 * @param string $name The name of the search application to be searched.
 	 * @param array|string $body The request body
 	 * @param array{
+	 *     typed_keys: bool, // Determines whether aggregation names are prefixed by their respective types in the response.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -292,7 +293,7 @@ class SearchApplication extends AbstractEndpoint
 	{
 		$url = '/_application/search_application/' . $this->encode($name) . '/_search';
 		$method = empty($body) ? 'GET' : 'POST';
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$url = $this->addQueryString($url, $params, ['typed_keys', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
 		    'Content-Type' => 'application/json'

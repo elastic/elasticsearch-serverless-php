@@ -26,18 +26,18 @@ use Http\Promise\Promise;
 /**
  * @generated This file is generated, please do not edit
  */
-class Tasks extends AbstractEndpoint
+class Esql extends AbstractEndpoint
 {
 	/**
-	 * Returns information about a task.
+	 * Executes an ESQL request
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/tasks.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/esql-rest.html
 	 *
 	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
-	 * @param string $task_id ID of the task.
+	 * @param array|string $body The request body
 	 * @param array{
-	 *     timeout: string|integer, // Period to wait for a response.If no response is received before the timeout expires, the request fails and returns an error.
-	 *     wait_for_completion: bool, // If `true`, the request blocks until the task has completed.
+	 *     format: string, // A short version of the Accept header, e.g. json, yaml.
+	 *     delimiter: string, // The character to use between values within a CSV row. Only valid for the CSV format.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -50,13 +50,13 @@ class Tasks extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function get(string $task_id, array $params = []): Elasticsearch|Promise
+	public function query(array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_tasks/' . $this->encode($task_id);
-		$method = 'GET';
+		$url = "/_query";
+		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
-			'timeout',
-			'wait_for_completion',
+			'format',
+			'delimiter',
 			'pretty',
 			'human',
 			'error_trace',
@@ -65,7 +65,8 @@ class Tasks extends AbstractEndpoint
 		]);
 		$headers = [
 		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
 		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
 	}
 }

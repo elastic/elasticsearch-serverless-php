@@ -81,7 +81,7 @@ class Sql extends AbstractEndpoint
 	 */
 	public function deleteAsync(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_sql/async/delete/' . $this->encode($id) . '';
+		$url = '/_sql/async/delete/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -116,7 +116,7 @@ class Sql extends AbstractEndpoint
 	 */
 	public function getAsync(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_sql/async/' . $this->encode($id) . '';
+		$url = '/_sql/async/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'delimiter',
@@ -157,7 +157,7 @@ class Sql extends AbstractEndpoint
 	 */
 	public function getAsyncStatus(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_sql/async/status/' . $this->encode($id) . '';
+		$url = '/_sql/async/status/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

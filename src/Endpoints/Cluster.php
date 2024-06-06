@@ -52,7 +52,7 @@ class Cluster extends AbstractEndpoint
 	public function deleteComponentTemplate(string|array $name, array $params = []): Elasticsearch|Promise
 	{
 		$name = $this->convertValue($name);
-		$url = '/_component_template/' . $this->encode($name) . '';
+		$url = '/_component_template/' . $this->encode($name);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -95,7 +95,7 @@ class Cluster extends AbstractEndpoint
 	public function existsComponentTemplate(string|array $name, array $params = []): Elasticsearch|Promise
 	{
 		$name = $this->convertValue($name);
-		$url = '/_component_template/' . $this->encode($name) . '';
+		$url = '/_component_template/' . $this->encode($name);
 		$method = 'HEAD';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -140,7 +140,7 @@ class Cluster extends AbstractEndpoint
 	public function getComponentTemplate(string $name = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($name)) {
-			$url = '/_component_template/' . $this->encode($name) . '';
+			$url = '/_component_template/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_component_template";
@@ -186,7 +186,7 @@ class Cluster extends AbstractEndpoint
 	public function info(string|array $target, array $params = []): Elasticsearch|Promise
 	{
 		$target = $this->convertValue($target);
-		$url = '/_info/' . $this->encode($target) . '';
+		$url = '/_info/' . $this->encode($target);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -228,7 +228,7 @@ class Cluster extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = '/_component_template/' . $this->encode($name) . '';
+		$url = '/_component_template/' . $this->encode($name);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'create',

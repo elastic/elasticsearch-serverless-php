@@ -50,7 +50,7 @@ class QueryRuleset extends AbstractEndpoint
 	 */
 	public function delete(string $ruleset_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_query_rules/' . $this->encode($ruleset_id) . '';
+		$url = '/_query_rules/' . $this->encode($ruleset_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -82,7 +82,7 @@ class QueryRuleset extends AbstractEndpoint
 	 */
 	public function get(string $ruleset_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_query_rules/' . $this->encode($ruleset_id) . '';
+		$url = '/_query_rules/' . $this->encode($ruleset_id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -99,8 +99,8 @@ class QueryRuleset extends AbstractEndpoint
 	 *
 	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param array{
-	 *     from: integer, // Starting offset (default: 0)
-	 *     size: integer, // specifies a max number of results to get
+	 *     from: int, // Starting offset (default: 0)
+	 *     size: int, // specifies a max number of results to get
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -148,7 +148,7 @@ class QueryRuleset extends AbstractEndpoint
 	 */
 	public function put(string $ruleset_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_query_rules/' . $this->encode($ruleset_id) . '';
+		$url = '/_query_rules/' . $this->encode($ruleset_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

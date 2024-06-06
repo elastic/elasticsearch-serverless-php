@@ -52,7 +52,7 @@ class Ingest extends AbstractEndpoint
 	 */
 	public function deletePipeline(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ingest/pipeline/' . $this->encode($id) . '';
+		$url = '/_ingest/pipeline/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -96,7 +96,7 @@ class Ingest extends AbstractEndpoint
 	public function getPipeline(string $id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = '/_ingest/pipeline/' . $this->encode($id) . '';
+			$url = '/_ingest/pipeline/' . $this->encode($id);
 			$method = 'GET';
 		} else {
 			$url = "/_ingest/pipeline";
@@ -158,7 +158,7 @@ class Ingest extends AbstractEndpoint
 	 * @param array{
 	 *     master_timeout: string|integer, // Period to wait for a connection to the master node. If no response is received before the timeout expires, the request fails and returns an error.
 	 *     timeout: string|integer, // Period to wait for a response. If no response is received before the timeout expires, the request fails and returns an error.
-	 *     if_version: integer, // Required version for optimistic concurrency control for pipeline updates
+	 *     if_version: int, // Required version for optimistic concurrency control for pipeline updates
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -173,7 +173,7 @@ class Ingest extends AbstractEndpoint
 	 */
 	public function putPipeline(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ingest/pipeline/' . $this->encode($id) . '';
+		$url = '/_ingest/pipeline/' . $this->encode($id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',

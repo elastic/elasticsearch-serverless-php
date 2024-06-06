@@ -55,7 +55,7 @@ class Indices extends AbstractEndpoint
 	 */
 	public function addBlock(string $index, string $block, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_block/' . $this->encode($block) . '';
+		$url = '/' . $this->encode($index) . '/_block/' . $this->encode($block);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_indices',
@@ -126,7 +126,7 @@ class Indices extends AbstractEndpoint
 	 * @param array{
 	 *     master_timeout: string|integer, // Period to wait for a connection to the master node.If no response is received before the timeout expires, the request fails and returns an error.
 	 *     timeout: string|integer, // Period to wait for a response.If no response is received before the timeout expires, the request fails and returns an error.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation. Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -141,7 +141,7 @@ class Indices extends AbstractEndpoint
 	 */
 	public function create(string $index, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '';
+		$url = '/' . $this->encode($index);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -187,7 +187,7 @@ class Indices extends AbstractEndpoint
 	 */
 	public function createDataStream(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_data_stream/' . $this->encode($name) . '';
+		$url = '/_data_stream/' . $this->encode($name);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -273,7 +273,7 @@ class Indices extends AbstractEndpoint
 	public function delete(string|array $index, array $params = []): Elasticsearch|Promise
 	{
 		$index = $this->convertValue($index);
-		$url = '/' . $this->encode($index) . '';
+		$url = '/' . $this->encode($index);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_indices',
@@ -322,7 +322,7 @@ class Indices extends AbstractEndpoint
 	{
 		$index = $this->convertValue($index);
 		$name = $this->convertValue($name);
-		$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name) . '';
+		$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -407,7 +407,7 @@ class Indices extends AbstractEndpoint
 	public function deleteDataStream(string|array $name, array $params = []): Elasticsearch|Promise
 	{
 		$name = $this->convertValue($name);
-		$url = '/_data_stream/' . $this->encode($name) . '';
+		$url = '/_data_stream/' . $this->encode($name);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'expand_wildcards',
@@ -427,7 +427,7 @@ class Indices extends AbstractEndpoint
 	/**
 	 * Deletes an index template.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-delete-template.html
 	 *
 	 * @param string|array $name Comma-separated list of index template names used to limit the request. Wildcard (*) expressions are supported.
 	 * @param array{
@@ -448,7 +448,7 @@ class Indices extends AbstractEndpoint
 	public function deleteIndexTemplate(string|array $name, array $params = []): Elasticsearch|Promise
 	{
 		$name = $this->convertValue($name);
-		$url = '/_index_template/' . $this->encode($name) . '';
+		$url = '/_index_template/' . $this->encode($name);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -494,7 +494,7 @@ class Indices extends AbstractEndpoint
 	public function exists(string|array $index, array $params = []): Elasticsearch|Promise
 	{
 		$index = $this->convertValue($index);
-		$url = '/' . $this->encode($index) . '';
+		$url = '/' . $this->encode($index);
 		$method = 'HEAD';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_indices',
@@ -550,10 +550,10 @@ class Indices extends AbstractEndpoint
 		$name = $this->convertValue($name);
 		$index = $this->convertValue($index);
 		if (isset($index)) {
-			$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name) . '';
+			$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name);
 			$method = 'HEAD';
 		} else {
-			$url = '/_alias/' . $this->encode($name) . '';
+			$url = '/_alias/' . $this->encode($name);
 			$method = 'HEAD';
 		}
 		$url = $this->addQueryString($url, $params, [
@@ -577,7 +577,7 @@ class Indices extends AbstractEndpoint
 	/**
 	 * Returns information about whether a particular index template exists.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/index-templates.html
 	 *
 	 * @param string $name Comma-separated list of index template names used to limit the request. Wildcard (*) expressions are supported.
 	 * @param array{
@@ -596,7 +596,7 @@ class Indices extends AbstractEndpoint
 	 */
 	public function existsIndexTemplate(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_index_template/' . $this->encode($name) . '';
+		$url = '/_index_template/' . $this->encode($name);
 		$method = 'HEAD';
 		$url = $this->addQueryString($url, $params, ['master_timeout', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -679,7 +679,7 @@ class Indices extends AbstractEndpoint
 	public function get(string|array $index, array $params = []): Elasticsearch|Promise
 	{
 		$index = $this->convertValue($index);
-		$url = '/' . $this->encode($index) . '';
+		$url = '/' . $this->encode($index);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_indices',
@@ -740,10 +740,10 @@ class Indices extends AbstractEndpoint
 		$name = $this->convertValue($name);
 		$index = $this->convertValue($index);
 		if (isset($index) && isset($name)) {
-			$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name) . '';
+			$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name);
 			$method = 'GET';
 		} elseif (isset($name)) {
-			$url = '/_alias/' . $this->encode($name) . '';
+			$url = '/_alias/' . $this->encode($name);
 			$method = 'GET';
 		} elseif (isset($index)) {
 			$url = '/' . $this->encode($index) . '/_alias';
@@ -840,7 +840,7 @@ class Indices extends AbstractEndpoint
 	{
 		$name = $this->convertValue($name);
 		if (isset($name)) {
-			$url = '/_data_stream/' . $this->encode($name) . '';
+			$url = '/_data_stream/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_data_stream";
@@ -865,7 +865,7 @@ class Indices extends AbstractEndpoint
 	/**
 	 * Returns an index template.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-get-template.html
 	 *
 	 * @param string $name Comma-separated list of index template names used to limit the request. Wildcard (*) expressions are supported.
 	 * @param array{
@@ -888,7 +888,7 @@ class Indices extends AbstractEndpoint
 	public function getIndexTemplate(string $name = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($name)) {
-			$url = '/_index_template/' . $this->encode($name) . '';
+			$url = '/_index_template/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_index_template";
@@ -1005,13 +1005,13 @@ class Indices extends AbstractEndpoint
 		$index = $this->convertValue($index);
 		$name = $this->convertValue($name);
 		if (isset($index) && isset($name)) {
-			$url = '/' . $this->encode($index) . '/_settings/' . $this->encode($name) . '';
+			$url = '/' . $this->encode($index) . '/_settings/' . $this->encode($name);
 			$method = 'GET';
 		} elseif (isset($index)) {
 			$url = '/' . $this->encode($index) . '/_settings';
 			$method = 'GET';
 		} elseif (isset($name)) {
-			$url = '/_settings/' . $this->encode($name) . '';
+			$url = '/_settings/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_settings";
@@ -1059,7 +1059,7 @@ class Indices extends AbstractEndpoint
 	 */
 	public function migrateToDataStream(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_data_stream/_migrate/' . $this->encode($name) . '';
+		$url = '/_data_stream/_migrate/' . $this->encode($name);
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1136,7 +1136,7 @@ class Indices extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		$index = $this->convertValue($index);
-		$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name) . '';
+		$url = '/' . $this->encode($index) . '/_alias/' . $this->encode($name);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -1209,12 +1209,14 @@ class Indices extends AbstractEndpoint
 	/**
 	 * Creates or updates an index template.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-put-template.html
 	 *
 	 * @param string $name Index or template name
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     create: bool, // If `true`, this request cannot replace or update existing index templates.
+	 *     master_timeout: string|integer, // Period to wait for a connection to the master node.If no response is received before the timeout expires, the request fails and returns an error.
+	 *     cause: string, // User defined reason for creating/updating the index template
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -1229,9 +1231,18 @@ class Indices extends AbstractEndpoint
 	 */
 	public function putIndexTemplate(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_index_template/' . $this->encode($name) . '';
+		$url = '/_index_template/' . $this->encode($name);
 		$method = 'PUT';
-		$url = $this->addQueryString($url, $params, ['create', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$url = $this->addQueryString($url, $params, [
+			'create',
+			'master_timeout',
+			'cause',
+			'pretty',
+			'human',
+			'error_trace',
+			'source',
+			'filter_path',
+		]);
 		$headers = [
 		    'Accept' => 'application/json',
 		    'Content-Type' => 'application/json'
@@ -1360,16 +1371,15 @@ class Indices extends AbstractEndpoint
 	/**
 	 * Creates or updates an index template.
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates-v1.html
 	 *
 	 * @param string $name The name of the template
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     create: bool, // If true, this request cannot replace or update existing index templates.
-	 *     flat_settings: bool, // If `true`, returns settings in flat format.
 	 *     master_timeout: string|integer, // Period to wait for a connection to the master node. If no response isreceived before the timeout expires, the request fails and returns an error.
-	 *     timeout: string|integer, // Period to wait for a response.If no response is received before the timeout expires, the request fails and returns an error.
-	 *     order: integer, // Order in which Elasticsearch applies this template if indexmatches multiple templates.Templates with lower 'order' values are merged first. Templates with higher'order' values are merged later, overriding templates with lower values.
+	 *     order: int, // Order in which Elasticsearch applies this template if indexmatches multiple templates.Templates with lower 'order' values are merged first. Templates with higher'order' values are merged later, overriding templates with lower values.
+	 *     cause: string, //
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -1384,14 +1394,13 @@ class Indices extends AbstractEndpoint
 	 */
 	public function putTemplate(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_template/' . $this->encode($name) . '';
+		$url = '/_template/' . $this->encode($name);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'create',
-			'flat_settings',
 			'master_timeout',
-			'timeout',
 			'order',
+			'cause',
 			'pretty',
 			'human',
 			'error_trace',
@@ -1481,7 +1490,7 @@ class Indices extends AbstractEndpoint
 	public function resolveIndex(string|array $name, array $params = []): Elasticsearch|Promise
 	{
 		$name = $this->convertValue($name);
-		$url = '/_resolve/index/' . $this->encode($name) . '';
+		$url = '/_resolve/index/' . $this->encode($name);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'expand_wildcards',
@@ -1513,7 +1522,7 @@ class Indices extends AbstractEndpoint
 	 *     dry_run: bool, // If `true`, checks whether the current index satisfies the specified conditions but does not perform a rollover.
 	 *     master_timeout: string|integer, // Period to wait for a connection to the master node.If no response is received before the timeout expires, the request fails and returns an error.
 	 *     timeout: string|integer, // Period to wait for a response.If no response is received before the timeout expires, the request fails and returns an error.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -1534,7 +1543,7 @@ class Indices extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		if (isset($new_index)) {
-			$url = '/' . $this->encode($alias) . '/_rollover/' . $this->encode($new_index) . '';
+			$url = '/' . $this->encode($alias) . '/_rollover/' . $this->encode($new_index);
 			$method = 'POST';
 		} else {
 			$url = '/' . $this->encode($alias) . '/_rollover';
@@ -1562,13 +1571,11 @@ class Indices extends AbstractEndpoint
 	/**
 	 * Simulate matching the given index name against the index templates in the system
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-simulate-index.html
 	 *
-	 * @param string $name Index or template name to simulate
-	 * @param array|string $body The request body
+	 * @param string $name Name of the index to simulate
 	 * @param array{
-	 *     create: bool, // If `true`, the template passed in the body is only used if no existingtemplates match the same index patterns. If `false`, the simulation usesthe template with the highest priority. Note that the template is notpermanently added or updated in either case; it is only used for thesimulation.
-	 *     master_timeout: string|integer, // Period to wait for a connection to the master node. If no response is receivedbefore the timeout expires, the request fails and returns an error.
+	 *     master_timeout: string|integer, // Period to wait for a connection to the master node. If no response is received before the timeout expires, the request fails and returns an error.
 	 *     include_defaults: bool, // If true, returns all relevant default configurations for the index template.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -1582,16 +1589,11 @@ class Indices extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function simulateIndexTemplate(
-		string $name,
-		array|string $body = [],
-		array $params = [],
-	): Elasticsearch|Promise
+	public function simulateIndexTemplate(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_index_template/_simulate_index/' . $this->encode($name) . '';
+		$url = '/_index_template/_simulate_index/' . $this->encode($name);
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
-			'create',
 			'master_timeout',
 			'include_defaults',
 			'pretty',
@@ -1604,14 +1606,14 @@ class Indices extends AbstractEndpoint
 		    'Accept' => 'application/json',
 		    'Content-Type' => 'application/json'
 		];
-		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers));
 	}
 
 
 	/**
 	 * Simulate resolving the given template name or body
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-simulate-template.html
 	 *
 	 * @param string $name Name of the index template to simulate. To test a template configuration before you add it to the cluster, omit
 	 * this parameter and specify the template configuration in the request body.
@@ -1639,7 +1641,7 @@ class Indices extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		if (isset($name)) {
-			$url = '/_index_template/_simulate/' . $this->encode($name) . '';
+			$url = '/_index_template/_simulate/' . $this->encode($name);
 			$method = 'POST';
 		} else {
 			$url = "/_index_template/_simulate";

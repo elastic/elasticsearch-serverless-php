@@ -19,10 +19,13 @@ namespace Elastic\Elasticsearch\Serverless\Traits;
 use Elastic\Elasticsearch\Serverless\Endpoints\AsyncSearch;
 use Elastic\Elasticsearch\Serverless\Endpoints\Cat;
 use Elastic\Elasticsearch\Serverless\Endpoints\Cluster;
+use Elastic\Elasticsearch\Serverless\Endpoints\Connector;
 use Elastic\Elasticsearch\Serverless\Endpoints\Enrich;
 use Elastic\Elasticsearch\Serverless\Endpoints\Eql;
+use Elastic\Elasticsearch\Serverless\Endpoints\Esql;
 use Elastic\Elasticsearch\Serverless\Endpoints\Graph;
 use Elastic\Elasticsearch\Serverless\Endpoints\Indices;
+use Elastic\Elasticsearch\Serverless\Endpoints\Inference;
 use Elastic\Elasticsearch\Serverless\Endpoints\Ingest;
 use Elastic\Elasticsearch\Serverless\Endpoints\License;
 use Elastic\Elasticsearch\Serverless\Endpoints\Logstash;
@@ -71,6 +74,15 @@ trait NamespaceTrait
 	}
 
 
+	public function connector(): Connector
+	{
+		if (!isset($this->namespace['Connector'])) {
+			$this->namespace['Connector'] = new Connector($this);
+		}
+		return $this->namespace['Connector'];
+	}
+
+
 	public function enrich(): Enrich
 	{
 		if (!isset($this->namespace['Enrich'])) {
@@ -89,6 +101,15 @@ trait NamespaceTrait
 	}
 
 
+	public function esql(): Esql
+	{
+		if (!isset($this->namespace['Esql'])) {
+			$this->namespace['Esql'] = new Esql($this);
+		}
+		return $this->namespace['Esql'];
+	}
+
+
 	public function graph(): Graph
 	{
 		if (!isset($this->namespace['Graph'])) {
@@ -104,6 +125,15 @@ trait NamespaceTrait
 			$this->namespace['Indices'] = new Indices($this);
 		}
 		return $this->namespace['Indices'];
+	}
+
+
+	public function inference(): Inference
+	{
+		if (!isset($this->namespace['Inference'])) {
+			$this->namespace['Inference'] = new Inference($this);
+		}
+		return $this->namespace['Inference'];
 	}
 
 

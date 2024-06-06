@@ -26,14 +26,16 @@ use Http\Promise\Promise;
 /**
  * @generated This file is generated, please do not edit
  */
-class Logstash extends AbstractEndpoint
+class Inference extends AbstractEndpoint
 {
 	/**
-	 * Deletes Logstash Pipelines used by Central Management
+	 * Delete an inference endpoint
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-delete-pipeline.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-inference-api.html
 	 *
-	 * @param string $id Identifier for the pipeline.
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $task_type The task type
+	 * @param string $inference_id The inference Id
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -47,10 +49,15 @@ class Logstash extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function deletePipeline(string $id, array $params = []): Elasticsearch|Promise
+	public function delete(string $inference_id, string $task_type = null, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_logstash/pipeline/' . $this->encode($id);
-		$method = 'DELETE';
+		if (isset($task_type)) {
+			$url = '/_inference/' . $this->encode($task_type) . '/' . $this->encode($inference_id);
+			$method = 'DELETE';
+		} else {
+			$url = '/_inference/' . $this->encode($inference_id);
+			$method = 'DELETE';
+		}
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',
@@ -60,11 +67,13 @@ class Logstash extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves Logstash Pipelines used by Central Management
+	 * Get an inference endpoint
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-get-pipeline.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-inference-api.html
 	 *
-	 * @param string|array $id Comma-separated list of pipeline identifiers.
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $task_type The task type
+	 * @param string $inference_id The inference Id
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -78,14 +87,16 @@ class Logstash extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function getPipeline(string|array $id = null, array $params = []): Elasticsearch|Promise
+	public function get(string $task_type = null, string $inference_id = null, array $params = []): Elasticsearch|Promise
 	{
-		$id = $this->convertValue($id);
-		if (isset($id)) {
-			$url = '/_logstash/pipeline/' . $this->encode($id);
+		if (isset($task_type) && isset($inference_id)) {
+			$url = '/_inference/' . $this->encode($task_type) . '/' . $this->encode($inference_id);
+			$method = 'GET';
+		} elseif (isset($inference_id)) {
+			$url = '/_inference/' . $this->encode($inference_id);
 			$method = 'GET';
 		} else {
-			$url = "/_logstash/pipeline";
+			$url = "/_inference";
 			$method = 'GET';
 		}
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
@@ -97,11 +108,59 @@ class Logstash extends AbstractEndpoint
 
 
 	/**
-	 * Adds and updates Logstash Pipelines used for Central Management
+	 * Perform inference
 	 *
-	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-put-pipeline.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/post-inference-api.html
 	 *
-	 * @param string $id Identifier for the pipeline.
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $task_type The task type
+	 * @param string $inference_id The inference Id
+	 * @param array|string $body The request body
+	 * @param array{
+	 *     timeout: string|integer, // Specifies the amount of time to wait for the inference request to complete.
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function inference(
+		string $inference_id,
+		string $task_type = null,
+		array|string $body = [],
+		array $params = [],
+	): Elasticsearch|Promise
+	{
+		if (isset($task_type)) {
+			$url = '/_inference/' . $this->encode($task_type) . '/' . $this->encode($inference_id);
+			$method = 'POST';
+		} else {
+			$url = '/_inference/' . $this->encode($inference_id);
+			$method = 'POST';
+		}
+		$url = $this->addQueryString($url, $params, ['timeout', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
+	}
+
+
+	/**
+	 * Configure an inference endpoint for use in the Inference API
+	 *
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-inference-api.html
+	 *
+	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
+	 * @param string $task_type The task type
+	 * @param string $inference_id The inference Id
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -116,10 +175,20 @@ class Logstash extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function putPipeline(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
+	public function put(
+		string $inference_id,
+		string $task_type = null,
+		array|string $body = [],
+		array $params = [],
+	): Elasticsearch|Promise
 	{
-		$url = '/_logstash/pipeline/' . $this->encode($id);
-		$method = 'PUT';
+		if (isset($task_type)) {
+			$url = '/_inference/' . $this->encode($task_type) . '/' . $this->encode($inference_id);
+			$method = 'PUT';
+		} else {
+			$url = '/_inference/' . $this->encode($inference_id);
+			$method = 'PUT';
+		}
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
 		    'Accept' => 'application/json',

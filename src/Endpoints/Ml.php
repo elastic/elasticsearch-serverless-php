@@ -94,7 +94,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteCalendar(string $calendar_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '';
+		$url = '/_ml/calendars/' . $this->encode($calendar_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -127,7 +127,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteCalendarEvent(string $calendar_id, string $event_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/events/' . $this->encode($event_id) . '';
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/events/' . $this->encode($event_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -165,7 +165,7 @@ class Ml extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		$job_id = $this->convertValue($job_id);
-		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/jobs/' . $this->encode($job_id) . '';
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/jobs/' . $this->encode($job_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -198,7 +198,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteDataFrameAnalytics(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '';
+		$url = '/_ml/data_frame/analytics/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'force',
@@ -241,7 +241,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteDatafeed(string $datafeed_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '';
+		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['force', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -272,7 +272,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteFilter(string $filter_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/filters/' . $this->encode($filter_id) . '';
+		$url = '/_ml/filters/' . $this->encode($filter_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -306,7 +306,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteJob(string $job_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '';
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'force',
@@ -347,7 +347,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function deleteTrainedModel(string $model_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/trained_models/' . $this->encode($model_id) . '';
+		$url = '/_ml/trained_models/' . $this->encode($model_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['force', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -383,7 +383,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/model_aliases/' . $this->encode($model_alias) . '';
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/model_aliases/' . $this->encode($model_alias);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -515,9 +515,9 @@ class Ml extends AbstractEndpoint
 	 * @param string $calendar_id A string that uniquely identifies a calendar. You can get information for multiple calendars by using a comma-separated list of ids or a wildcard expression. You can get information for all calendars by using `_all` or `*` or by omitting the calendar identifier.
 	 * @param array{
 	 *     end: string, // Specifies to get events with timestamps earlier than this time.
-	 *     from: integer, // Skips the specified number of events.
+	 *     from: int, // Skips the specified number of events.
 	 *     job_id: string, // Specifies to get events for a specific anomaly detection job identifier or job group. It must be used with a calendar identifier of `_all` or `*`.
-	 *     size: integer, // Specifies the maximum number of events to obtain.
+	 *     size: int, // Specifies the maximum number of events to obtain.
 	 *     start: string, // Specifies to get events with timestamps after this time.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -562,8 +562,8 @@ class Ml extends AbstractEndpoint
 	 * @param string $calendar_id A string that uniquely identifies a calendar. You can get information for multiple calendars by using a comma-separated list of ids or a wildcard expression. You can get information for all calendars by using `_all` or `*` or by omitting the calendar identifier.
 	 * @param array|string $body The request body
 	 * @param array{
-	 *     from: integer, // Skips the specified number of calendars. This parameter is supported only when you omit the calendar identifier.
-	 *     size: integer, // Specifies the maximum number of calendars to obtain. This parameter is supported only when you omit the calendar identifier.
+	 *     from: int, // Skips the specified number of calendars. This parameter is supported only when you omit the calendar identifier.
+	 *     size: int, // Specifies the maximum number of calendars to obtain. This parameter is supported only when you omit the calendar identifier.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -583,7 +583,7 @@ class Ml extends AbstractEndpoint
 	): Elasticsearch|Promise
 	{
 		if (isset($calendar_id)) {
-			$url = '/_ml/calendars/' . $this->encode($calendar_id) . '';
+			$url = '/_ml/calendars/' . $this->encode($calendar_id);
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = "/_ml/calendars";
@@ -608,8 +608,8 @@ class Ml extends AbstractEndpoint
 	 * analytics jobs.
 	 * @param array{
 	 *     allow_no_match: bool, // Specifies what to do when the request:1. Contains wildcard expressions and there are no data frame analyticsjobs that match.2. Contains the `_all` string or no identifiers and there are no matches.3. Contains wildcard expressions and there are only partial matches.The default value returns an empty data_frame_analytics array when thereare no matches and the subset of results when there are partial matches.If this parameter is `false`, the request returns a 404 status code whenthere are no matches or only partial matches.
-	 *     from: integer, // Skips the specified number of data frame analytics jobs.
-	 *     size: integer, // Specifies the maximum number of data frame analytics jobs to obtain.
+	 *     from: int, // Skips the specified number of data frame analytics jobs.
+	 *     size: int, // Specifies the maximum number of data frame analytics jobs to obtain.
 	 *     exclude_generated: bool, // Indicates if certain fields should be removed from the configuration onretrieval. This allows the configuration to be in an acceptable format tobe retrieved and then added to another cluster.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -626,7 +626,7 @@ class Ml extends AbstractEndpoint
 	public function getDataFrameAnalytics(string $id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '';
+			$url = '/_ml/data_frame/analytics/' . $this->encode($id);
 			$method = 'GET';
 		} else {
 			$url = "/_ml/data_frame/analytics";
@@ -660,8 +660,8 @@ class Ml extends AbstractEndpoint
 	 * analytics jobs.
 	 * @param array{
 	 *     allow_no_match: bool, // Specifies what to do when the request:1. Contains wildcard expressions and there are no data frame analyticsjobs that match.2. Contains the `_all` string or no identifiers and there are no matches.3. Contains wildcard expressions and there are only partial matches.The default value returns an empty data_frame_analytics array when thereare no matches and the subset of results when there are partial matches.If this parameter is `false`, the request returns a 404 status code whenthere are no matches or only partial matches.
-	 *     from: integer, // Skips the specified number of data frame analytics jobs.
-	 *     size: integer, // Specifies the maximum number of data frame analytics jobs to obtain.
+	 *     from: int, // Skips the specified number of data frame analytics jobs.
+	 *     size: int, // Specifies the maximum number of data frame analytics jobs to obtain.
 	 *     verbose: bool, // Defines whether the stats response should be verbose.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -769,7 +769,7 @@ class Ml extends AbstractEndpoint
 	{
 		$datafeed_id = $this->convertValue($datafeed_id);
 		if (isset($datafeed_id)) {
-			$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '';
+			$url = '/_ml/datafeeds/' . $this->encode($datafeed_id);
 			$method = 'GET';
 		} else {
 			$url = "/_ml/datafeeds";
@@ -798,8 +798,8 @@ class Ml extends AbstractEndpoint
 	 *
 	 * @param string|array $filter_id A string that uniquely identifies a filter.
 	 * @param array{
-	 *     from: integer, // Skips the specified number of filters.
-	 *     size: integer, // Specifies the maximum number of filters to obtain.
+	 *     from: int, // Skips the specified number of filters.
+	 *     size: int, // Specifies the maximum number of filters to obtain.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -816,7 +816,7 @@ class Ml extends AbstractEndpoint
 	{
 		$filter_id = $this->convertValue($filter_id);
 		if (isset($filter_id)) {
-			$url = '/_ml/filters/' . $this->encode($filter_id) . '';
+			$url = '/_ml/filters/' . $this->encode($filter_id);
 			$method = 'GET';
 		} else {
 			$url = "/_ml/filters";
@@ -897,7 +897,7 @@ class Ml extends AbstractEndpoint
 	{
 		$job_id = $this->convertValue($job_id);
 		if (isset($job_id)) {
-			$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '';
+			$url = '/_ml/anomaly_detectors/' . $this->encode($job_id);
 			$method = 'GET';
 		} else {
 			$url = "/_ml/anomaly_detectors";
@@ -938,7 +938,7 @@ class Ml extends AbstractEndpoint
 	 *     exclude_interim: bool, // If `true`, the output excludes interim results.
 	 *     overall_score: float|string, // Returns overall buckets with overall scores greater than or equal to thisvalue.
 	 *     start: string, // Returns overall buckets with timestamps after this time.
-	 *     top_n: integer, // The number of top anomaly detection job bucket scores to be used in the`overall_score` calculation.
+	 *     top_n: int, // The number of top anomaly detection job bucket scores to be used in the`overall_score` calculation.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -987,9 +987,9 @@ class Ml extends AbstractEndpoint
 	 *     allow_no_match: bool, // Specifies what to do when the request:- Contains wildcard expressions and there are no models that match.- Contains the _all string or no identifiers and there are no matches.- Contains wildcard expressions and there are only partial matches.If true, it returns an empty array when there are no matches and thesubset of results when there are partial matches.
 	 *     decompress_definition: bool, // Specifies whether the included model definition should be returned as aJSON map (true) or in a custom compressed format (false).
 	 *     exclude_generated: bool, // Indicates if certain fields should be removed from the configuration onretrieval. This allows the configuration to be in an acceptable format tobe retrieved and then added to another cluster.
-	 *     from: integer, // Skips the specified number of models.
+	 *     from: int, // Skips the specified number of models.
 	 *     include: string, // A comma delimited string of optional fields to include in the responsebody.
-	 *     size: integer, // Specifies the maximum number of models to obtain.
+	 *     size: int, // Specifies the maximum number of models to obtain.
 	 *     tags: string, // A comma delimited string of tags. A trained model can have many tags, ornone. When supplied, only trained models that contain all the suppliedtags are returned.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -1006,7 +1006,7 @@ class Ml extends AbstractEndpoint
 	public function getTrainedModels(string $model_id = null, array $params = []): Elasticsearch|Promise
 	{
 		if (isset($model_id)) {
-			$url = '/_ml/trained_models/' . $this->encode($model_id) . '';
+			$url = '/_ml/trained_models/' . $this->encode($model_id);
 			$method = 'GET';
 		} else {
 			$url = "/_ml/trained_models";
@@ -1042,8 +1042,8 @@ class Ml extends AbstractEndpoint
 	 * comma-separated list or a wildcard expression.
 	 * @param array{
 	 *     allow_no_match: bool, // Specifies what to do when the request:- Contains wildcard expressions and there are no models that match.- Contains the _all string or no identifiers and there are no matches.- Contains wildcard expressions and there are only partial matches.If true, it returns an empty array when there are no matches and thesubset of results when there are partial matches.
-	 *     from: integer, // Skips the specified number of models.
-	 *     size: integer, // Specifies the maximum number of models to obtain.
+	 *     from: int, // Skips the specified number of models.
+	 *     size: int, // Specifies the maximum number of models to obtain.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -1303,7 +1303,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putCalendar(string $calendar_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '';
+		$url = '/_ml/calendars/' . $this->encode($calendar_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1336,7 +1336,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putCalendarJob(string $calendar_id, string $job_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/jobs/' . $this->encode($job_id) . '';
+		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/jobs/' . $this->encode($job_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1370,7 +1370,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putDataFrameAnalytics(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/data_frame/analytics/' . $this->encode($id) . '';
+		$url = '/_ml/data_frame/analytics/' . $this->encode($id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1409,7 +1409,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putDatafeed(string $datafeed_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id) . '';
+		$url = '/_ml/datafeeds/' . $this->encode($datafeed_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'allow_no_indices',
@@ -1452,7 +1452,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putFilter(string $filter_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/filters/' . $this->encode($filter_id) . '';
+		$url = '/_ml/filters/' . $this->encode($filter_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1485,7 +1485,7 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putJob(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '';
+		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1504,7 +1504,8 @@ class Ml extends AbstractEndpoint
 	 * @param string $model_id The unique identifier of the trained model.
 	 * @param array|string $body The request body
 	 * @param array{
-	 *     defer_definition_decompression: bool, // If set to `true` and a `compressed_definition` is provided, the request defers definition decompression and skips relevant validations.
+	 *     defer_definition_decompression: bool, // If set to `true` and a `compressed_definition` is provided,the request defers definition decompression and skips relevantvalidations.
+	 *     wait_for_completion: bool, // Whether to wait for all child operations (e.g. model download)to complete.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -1519,10 +1520,11 @@ class Ml extends AbstractEndpoint
 	 */
 	public function putTrainedModel(string $model_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_ml/trained_models/' . $this->encode($model_id) . '';
+		$url = '/_ml/trained_models/' . $this->encode($model_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'defer_definition_decompression',
+			'wait_for_completion',
 			'pretty',
 			'human',
 			'error_trace',
@@ -1564,7 +1566,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/model_aliases/' . $this->encode($model_alias) . '';
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/model_aliases/' . $this->encode($model_alias);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['reassign', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1581,7 +1583,7 @@ class Ml extends AbstractEndpoint
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-model-definition-part.html
 	 *
 	 * @param string $model_id The unique identifier of the trained model.
-	 * @param integer $part The definition part number. When the definition is loaded for inference the definition parts are streamed in the
+	 * @param int $part The definition part number. When the definition is loaded for inference the definition parts are streamed in the
 	 * order of their part number. The first part must be `0` and the final part must be `total_parts - 1`.
 	 * @param array|string $body The request body
 	 * @param array{
@@ -1604,7 +1606,7 @@ class Ml extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/definition/' . $this->encode($part) . '';
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/definition/' . $this->encode($part);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -1786,11 +1788,12 @@ class Ml extends AbstractEndpoint
 	 *
 	 * @param string $model_id The unique identifier of the trained model. Currently, only PyTorch models are supported.
 	 * @param array{
-	 *     cache_size: integer|string, // The inference cache size (in memory outside the JVM heap) per node for the model.The default value is the same size as the `model_size_bytes`. To disable the cache,`0b` can be provided.
-	 *     number_of_allocations: integer, // The number of model allocations on each node where the model is deployed.All allocations on a node share the same copy of the model in memory but usea separate set of threads to evaluate the model.Increasing this value generally increases the throughput.If this setting is greater than the number of hardware threadsit will automatically be changed to a value less than the number of hardware threads.
+	 *     cache_size: int|string, // The inference cache size (in memory outside the JVM heap) per node for the model.The default value is the same size as the `model_size_bytes`. To disable the cache,`0b` can be provided.
+	 *     deployment_id: string, // A unique identifier for the deployment of the model.
+	 *     number_of_allocations: int, // The number of model allocations on each node where the model is deployed.All allocations on a node share the same copy of the model in memory but usea separate set of threads to evaluate the model.Increasing this value generally increases the throughput.If this setting is greater than the number of hardware threadsit will automatically be changed to a value less than the number of hardware threads.
 	 *     priority: string, // The deployment priority.
-	 *     queue_capacity: integer, // Specifies the number of inference requests that are allowed in the queue. After the number of requests exceedsthis value, new requests are rejected with a 429 error.
-	 *     threads_per_allocation: integer, // Sets the number of threads used by each model allocation during inference. This generally increasesthe inference speed. The inference process is a compute-bound process; any numbergreater than the number of available hardware threads on the machine does not increase theinference speed. If this setting is greater than the number of hardware threadsit will automatically be changed to a value less than the number of hardware threads.
+	 *     queue_capacity: int, // Specifies the number of inference requests that are allowed in the queue. After the number of requests exceedsthis value, new requests are rejected with a 429 error.
+	 *     threads_per_allocation: int, // Sets the number of threads used by each model allocation during inference. This generally increasesthe inference speed. The inference process is a compute-bound process; any numbergreater than the number of available hardware threads on the machine does not increase theinference speed. If this setting is greater than the number of hardware threadsit will automatically be changed to a value less than the number of hardware threads.
 	 *     timeout: string|integer, // Specifies the amount of time to wait for the model to deploy.
 	 *     wait_for: string, // Specifies the allocation status to wait for before returning.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -1811,6 +1814,7 @@ class Ml extends AbstractEndpoint
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'cache_size',
+			'deployment_id',
 			'number_of_allocations',
 			'priority',
 			'queue_capacity',
@@ -2114,6 +2118,43 @@ class Ml extends AbstractEndpoint
 	public function updateJob(string $job_id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
 		$url = '/_ml/anomaly_detectors/' . $this->encode($job_id) . '/_update';
+		$method = 'POST';
+		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$headers = [
+		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
+		];
+		return $this->client->sendRequest($this->createRequest($method, $url, $headers, $body));
+	}
+
+
+	/**
+	 * Updates certain properties of trained model deployment.
+	 *
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/update-trained-model-deployment.html
+	 *
+	 * @param string $model_id The unique identifier of the trained model. Currently, only PyTorch models are supported.
+	 * @param array|string $body The request body
+	 * @param array{
+	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
+	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
+	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
+	 *     source: string, // The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests.
+	 *     filter_path: string, // A comma-separated list of filters used to reduce the response.
+	 * } $params
+	 * @return Elasticsearch|Promise
+	 *
+	 * @throws NoNodeAvailableException if all the hosts are offline
+	 * @throws ClientResponseException if the status code of response is 4xx
+	 * @throws ServerResponseException if the status code of response is 5xx
+	 */
+	public function updateTrainedModelDeployment(
+		string $model_id,
+		array|string $body = [],
+		array $params = [],
+	): Elasticsearch|Promise
+	{
+		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/deployment/_update';
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

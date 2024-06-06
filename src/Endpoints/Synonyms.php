@@ -33,7 +33,6 @@ class Synonyms extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-synonyms-set.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param string $id The id of the synonyms set to be deleted
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -50,7 +49,7 @@ class Synonyms extends AbstractEndpoint
 	 */
 	public function deleteSynonym(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_synonyms/' . $this->encode($id) . '';
+		$url = '/_synonyms/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -65,7 +64,6 @@ class Synonyms extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-synonym-rule.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param string $set_id The id of the synonym set to be updated
 	 * @param string $rule_id The id of the synonym rule to be deleted
 	 * @param array{
@@ -83,7 +81,7 @@ class Synonyms extends AbstractEndpoint
 	 */
 	public function deleteSynonymRule(string $set_id, string $rule_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id) . '';
+		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -99,11 +97,10 @@ class Synonyms extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-synonyms-set.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param string $id "The id of the synonyms set to be retrieved
 	 * @param array{
-	 *     from: integer, // Starting offset for query rules to be retrieved
-	 *     size: integer, // specifies a max number of query rules to retrieve
+	 *     from: int, // Starting offset for query rules to be retrieved
+	 *     size: int, // specifies a max number of query rules to retrieve
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -118,7 +115,7 @@ class Synonyms extends AbstractEndpoint
 	 */
 	public function getSynonym(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_synonyms/' . $this->encode($id) . '';
+		$url = '/_synonyms/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['from', 'size', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -133,7 +130,6 @@ class Synonyms extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-synonym-rule.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param string $set_id The id of the synonym set to retrieve the synonym rule from
 	 * @param string $rule_id The id of the synonym rule to retrieve
 	 * @param array{
@@ -151,7 +147,7 @@ class Synonyms extends AbstractEndpoint
 	 */
 	public function getSynonymRule(string $set_id, string $rule_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id) . '';
+		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -167,10 +163,9 @@ class Synonyms extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/list-synonyms-sets.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param array{
-	 *     from: integer, // Starting offset
-	 *     size: integer, // specifies a max number of results to get
+	 *     from: int, // Starting offset
+	 *     size: int, // specifies a max number of results to get
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -200,7 +195,6 @@ class Synonyms extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-synonyms-set.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param string $id The id of the synonyms set to be created or updated
 	 * @param array|string $body The request body
 	 * @param array{
@@ -218,7 +212,7 @@ class Synonyms extends AbstractEndpoint
 	 */
 	public function putSynonym(string $id, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_synonyms/' . $this->encode($id) . '';
+		$url = '/_synonyms/' . $this->encode($id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -234,7 +228,6 @@ class Synonyms extends AbstractEndpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-synonym-rule.html
 	 *
-	 * @internal This API is EXPERIMENTAL and may be changed or removed completely in a future release
 	 * @param string $set_id The id of the synonym set to be updated with the synonym rule
 	 * @param string $rule_id The id of the synonym rule to be updated or created
 	 * @param array|string $body The request body
@@ -258,7 +251,7 @@ class Synonyms extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id) . '';
+		$url = '/_synonyms/' . $this->encode($set_id) . '/' . $this->encode($rule_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

@@ -28,7 +28,7 @@ use Psr\Log\LoggerInterface;
 final class Client implements ClientInterface
 {
     const CLIENT_NAME = 'esv';
-    const VERSION = '0.1.0-alpha2';
+    const VERSION = '0.1.0';
     const API_VERSION_HEADER = 'Elastic-Api-Version';
     const API_VERSION = '2023-10-31';
    

@@ -43,7 +43,7 @@ trait ClientEndpointsTrait
 	 *     _source_excludes: string|array, // A comma-separated list of source fields to exclude from the response.
 	 *     _source_includes: string|array, // A comma-separated list of source fields to include in the response.
 	 *     timeout: string|integer, // Period each action waits for the following operations: automatic index creation, dynamic mapping updates, waiting for active shards.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     require_alias: bool, // If `true`, the request’s actions must target an index alias.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -119,7 +119,7 @@ trait ClientEndpointsTrait
 	{
 		$scroll_id = $this->convertValue($scroll_id);
 		if (isset($scroll_id)) {
-			$url = '/_search/scroll/' . $this->encode($scroll_id) . '';
+			$url = '/_search/scroll/' . $this->encode($scroll_id);
 			$method = 'DELETE';
 		} else {
 			$url = "/_search/scroll";
@@ -188,7 +188,7 @@ trait ClientEndpointsTrait
 	 *     min_score: float, // Sets the minimum `_score` value that documents must have to be included in the result.
 	 *     preference: string, // Specifies the node or shard the operation should be performed on.Random by default.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
-	 *     terminate_after: integer, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.
+	 *     terminate_after: int, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.
 	 *     q: string, // Query in the Lucene query string syntax.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -258,9 +258,9 @@ trait ClientEndpointsTrait
 	 *     refresh: string, // If `true`, Elasticsearch refreshes the affected shards to make this operation visible to search, if `wait_for` then wait for a refresh to make this operation visible to search, if `false` do nothing with refreshes.Valid values: `true`, `false`, `wait_for`.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     timeout: string|integer, // Period the request waits for the following operations: automatic index creation, dynamic mapping updates, waiting for active shards.
-	 *     version: integer, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
+	 *     version: int, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
 	 *     version_type: string, // Specific version type: `external`, `external_gte`.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -275,7 +275,7 @@ trait ClientEndpointsTrait
 	 */
 	public function create(string $id, string $index, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_create/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_create/' . $this->encode($id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'pipeline',
@@ -307,14 +307,14 @@ trait ClientEndpointsTrait
 	 * @param string $id Unique identifier for the document.
 	 * @param string $index Name of the target index.
 	 * @param array{
-	 *     if_primary_term: integer, // Only perform the operation if the document has this primary term.
-	 *     if_seq_no: integer, // Only perform the operation if the document has this sequence number.
+	 *     if_primary_term: int, // Only perform the operation if the document has this primary term.
+	 *     if_seq_no: int, // Only perform the operation if the document has this sequence number.
 	 *     refresh: string, // If `true`, Elasticsearch refreshes the affected shards to make this operation visible to search, if `wait_for` then wait for a refresh to make this operation visible to search, if `false` do nothing with refreshes.Valid values: `true`, `false`, `wait_for`.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     timeout: string|integer, // Period to wait for active shards.
-	 *     version: integer, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
+	 *     version: int, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
 	 *     version_type: string, // Specific version type: `external`, `external_gte`.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -329,7 +329,7 @@ trait ClientEndpointsTrait
 	 */
 	public function delete(string $id, string $index, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'if_primary_term',
@@ -370,10 +370,10 @@ trait ClientEndpointsTrait
 	 *     default_operator: string, // The default operator for query string query: `AND` or `OR`.
 	 *     df: string, // Field to use as default where no field prefix is given in the query string.
 	 *     expand_wildcards: string|array, // Type of index that wildcard patterns can match.If the request can target data streams, this argument determines whether wildcard expressions match hidden data streams.Supports comma-separated values, such as `open,hidden`. Valid values are: `all`, `open`, `closed`, `hidden`, `none`.
-	 *     from: integer, // Starting offset (default: 0)
+	 *     from: int, // Starting offset (default: 0)
 	 *     ignore_unavailable: bool, // If `false`, the request returns an error if it targets a missing or closed index.
 	 *     lenient: bool, // If `true`, format-based query failures (such as providing text to a numeric field) in the query string will be ignored.
-	 *     max_docs: integer, // Maximum number of documents to process.Defaults to all documents.
+	 *     max_docs: int, // Maximum number of documents to process.Defaults to all documents.
 	 *     preference: string, // Specifies the node or shard the operation should be performed on.Random by default.
 	 *     refresh: bool, // If `true`, Elasticsearch refreshes all shards involved in the delete by query after the request completes.
 	 *     request_cache: bool, // If `true`, the request cache is used for this request.Defaults to the index-level setting.
@@ -381,16 +381,16 @@ trait ClientEndpointsTrait
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     q: string, // Query in the Lucene query string syntax.
 	 *     scroll: string|integer, // Period to retain the search context for scrolling.
-	 *     scroll_size: integer, // Size of the scroll request that powers the operation.
+	 *     scroll_size: int, // Size of the scroll request that powers the operation.
 	 *     search_timeout: string|integer, // Explicit timeout for each search request.Defaults to no timeout.
 	 *     search_type: string, // The type of the search operation.Available options: `query_then_fetch`, `dfs_query_then_fetch`.
-	 *     slices: integer|string, // The number of slices this task should be divided into.
+	 *     slices: int|string, // The number of slices this task should be divided into.
 	 *     sort: array, // A comma-separated list of <field>:<direction> pairs.
 	 *     stats: array, // Specific `tag` of the request for logging and statistical purposes.
-	 *     terminate_after: integer, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.Use with caution.Elasticsearch applies this parameter to each shard handling the request.When possible, let Elasticsearch perform early termination automatically.Avoid specifying this parameter for requests that target data streams with backing indices across multiple data tiers.
+	 *     terminate_after: int, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.Use with caution.Elasticsearch applies this parameter to each shard handling the request.When possible, let Elasticsearch perform early termination automatically.Avoid specifying this parameter for requests that target data streams with backing indices across multiple data tiers.
 	 *     timeout: string|integer, // Period each deletion request waits for active shards.
 	 *     version: bool, // If `true`, returns the document version as part of a hit.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     wait_for_completion: bool, // If `true`, the request blocks until the operation is complete.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -480,7 +480,7 @@ trait ClientEndpointsTrait
 	 */
 	public function deleteScript(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_scripts/' . $this->encode($id) . '';
+		$url = '/_scripts/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'master_timeout',
@@ -515,7 +515,7 @@ trait ClientEndpointsTrait
 	 *     _source_excludes: string|array, // A comma-separated list of source fields to exclude in the response.
 	 *     _source_includes: string|array, // A comma-separated list of source fields to include in the response.
 	 *     stored_fields: string|array, // List of stored fields to return as part of a hit.If no fields are specified, no stored fields are included in the response.If this field is specified, the `_source` parameter defaults to false.
-	 *     version: integer, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
+	 *     version: int, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
 	 *     version_type: string, // Specific version type: `external`, `external_gte`.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -531,7 +531,7 @@ trait ClientEndpointsTrait
 	 */
 	public function exists(string $id, string $index, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id);
 		$method = 'HEAD';
 		$url = $this->addQueryString($url, $params, [
 			'preference',
@@ -573,7 +573,7 @@ trait ClientEndpointsTrait
 	 *     _source: bool|string, // `true` or `false` to return the `_source` field or not, or a list of fields to return.
 	 *     _source_excludes: string|array, // A comma-separated list of source fields to exclude in the response.
 	 *     _source_includes: string|array, // A comma-separated list of source fields to include in the response.
-	 *     version: integer, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
+	 *     version: int, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
 	 *     version_type: string, // Specific version type: `external`, `external_gte`.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -589,7 +589,7 @@ trait ClientEndpointsTrait
 	 */
 	public function existsSource(string $id, string $index, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_source/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_source/' . $this->encode($id);
 		$method = 'HEAD';
 		$url = $this->addQueryString($url, $params, [
 			'preference',
@@ -655,7 +655,7 @@ trait ClientEndpointsTrait
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_explain/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_explain/' . $this->encode($id);
 		$method = empty($body) ? 'GET' : 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'analyzer',
@@ -699,6 +699,7 @@ trait ClientEndpointsTrait
 	 *     include_unmapped: bool, // If true, unmapped fields are included in the response.
 	 *     filters: string, // An optional set of filters: can include +metadata,-metadata,-nested,-multifield,-parent
 	 *     types: array, // Only return results for fields that have one of the types in the list
+	 *     include_empty_fields: bool, // If false, empty fields are not included in the response.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -733,6 +734,7 @@ trait ClientEndpointsTrait
 			'include_unmapped',
 			'filters',
 			'types',
+			'include_empty_fields',
 			'pretty',
 			'human',
 			'error_trace',
@@ -755,6 +757,7 @@ trait ClientEndpointsTrait
 	 * @param string $id Unique identifier of the document.
 	 * @param string $index Name of the index that contains the document.
 	 * @param array{
+	 *     force_synthetic_source: bool, // Should this request force synthetic _source?Use this to test if the mapping supports synthetic _source and to get a sense of the worst case performance.Fetches with this enabled will be slower the enabling synthetic source natively in the index.
 	 *     preference: string, // Specifies the node or shard the operation should be performed on. Random by default.
 	 *     realtime: bool, // If `true`, the request is real-time as opposed to near-real-time.
 	 *     refresh: bool, // If true, Elasticsearch refreshes the affected shards to make this operation visible to search. If false, do nothing with refreshes.
@@ -763,7 +766,7 @@ trait ClientEndpointsTrait
 	 *     _source_excludes: string|array, // A comma-separated list of source fields to exclude in the response.
 	 *     _source_includes: string|array, // A comma-separated list of source fields to include in the response.
 	 *     stored_fields: string|array, // List of stored fields to return as part of a hit.If no fields are specified, no stored fields are included in the response.If this field is specified, the `_source` parameter defaults to false.
-	 *     version: integer, // Explicit version number for concurrency control. The specified version must match the current version of the document for the request to succeed.
+	 *     version: int, // Explicit version number for concurrency control. The specified version must match the current version of the document for the request to succeed.
 	 *     version_type: string, // Specific version type: internal, external, external_gte.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -779,9 +782,10 @@ trait ClientEndpointsTrait
 	 */
 	public function get(string $id, string $index, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
+			'force_synthetic_source',
 			'preference',
 			'realtime',
 			'refresh',
@@ -827,7 +831,7 @@ trait ClientEndpointsTrait
 	 */
 	public function getScript(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_scripts/' . $this->encode($id) . '';
+		$url = '/_scripts/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['master_timeout', 'pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -853,7 +857,7 @@ trait ClientEndpointsTrait
 	 *     _source_excludes: string|array, // A comma-separated list of source fields to exclude in the response.
 	 *     _source_includes: string|array, // A comma-separated list of source fields to include in the response.
 	 *     stored_fields: string|array, //
-	 *     version: integer, // Explicit version number for concurrency control. The specified version must match the current version of the document for the request to succeed.
+	 *     version: int, // Explicit version number for concurrency control. The specified version must match the current version of the document for the request to succeed.
 	 *     version_type: string, // Specific version type: internal, external, external_gte.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -869,7 +873,7 @@ trait ClientEndpointsTrait
 	 */
 	public function getSource(string $id, string $index, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_source/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_source/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'preference',
@@ -904,16 +908,16 @@ trait ClientEndpointsTrait
 	 * @param string $index Name of the data stream or index to target.
 	 * @param array|string $body The request body
 	 * @param array{
-	 *     if_primary_term: integer, // Only perform the operation if the document has this primary term.
-	 *     if_seq_no: integer, // Only perform the operation if the document has this sequence number.
+	 *     if_primary_term: int, // Only perform the operation if the document has this primary term.
+	 *     if_seq_no: int, // Only perform the operation if the document has this sequence number.
 	 *     op_type: string, // Set to create to only index the document if it does not already exist (put if absent).If a document with the specified `_id` already exists, the indexing operation will fail.Same as using the `<index>/_create` endpoint.Valid values: `index`, `create`.If document id is specified, it defaults to `index`.Otherwise, it defaults to `create`.
 	 *     pipeline: string, // ID of the pipeline to use to preprocess incoming documents.If the index has a default ingest pipeline specified, then setting the value to `_none` disables the default ingest pipeline for this request.If a final pipeline is configured it will always run, regardless of the value of this parameter.
 	 *     refresh: string, // If `true`, Elasticsearch refreshes the affected shards to make this operation visible to search, if `wait_for` then wait for a refresh to make this operation visible to search, if `false` do nothing with refreshes.Valid values: `true`, `false`, `wait_for`.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     timeout: string|integer, // Period the request waits for the following operations: automatic index creation, dynamic mapping updates, waiting for active shards.
-	 *     version: integer, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
+	 *     version: int, // Explicit version number for concurrency control.The specified version must match the current version of the document for the request to succeed.
 	 *     version_type: string, // Specific version type: `external`, `external_gte`.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to all or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     require_alias: bool, // If `true`, the destination must be an index alias.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -935,7 +939,7 @@ trait ClientEndpointsTrait
 	): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id) . '';
+			$url = '/' . $this->encode($index) . '/_doc/' . $this->encode($id);
 			$method = 'PUT';
 		} else {
 			$url = '/' . $this->encode($index) . '/_doc';
@@ -1005,6 +1009,7 @@ trait ClientEndpointsTrait
 	 * @param string $index Name of the index to retrieve documents from when `ids` are specified, or when a document in the `docs` array does not specify an index.
 	 * @param array|string $body The request body
 	 * @param array{
+	 *     force_synthetic_source: bool, // Should this request force synthetic _source?Use this to test if the mapping supports synthetic _source and to get a sense of the worst case performance.Fetches with this enabled will be slower the enabling synthetic source natively in the index.
 	 *     preference: string, // Specifies the node or shard the operation should be performed on. Random by default.
 	 *     realtime: bool, // If `true`, the request is real-time as opposed to near-real-time.
 	 *     refresh: bool, // If `true`, the request refreshes relevant shards before retrieving documents.
@@ -1035,6 +1040,7 @@ trait ClientEndpointsTrait
 			$method = empty($body) ? 'GET' : 'POST';
 		}
 		$url = $this->addQueryString($url, $params, [
+			'force_synthetic_source',
 			'preference',
 			'realtime',
 			'refresh',
@@ -1070,9 +1076,9 @@ trait ClientEndpointsTrait
 	 *     expand_wildcards: string|array, // Type of index that wildcard expressions can match. If the request can target data streams, this argument determines whether wildcard expressions match hidden data streams.
 	 *     ignore_throttled: bool, // If true, concrete, expanded or aliased indices are ignored when frozen.
 	 *     ignore_unavailable: bool, // If true, missing or closed indices are not included in the response.
-	 *     max_concurrent_searches: integer, // Maximum number of concurrent searches the multi search API can execute.
-	 *     max_concurrent_shard_requests: integer, // Maximum number of concurrent shard requests that each sub-search request executes per node.
-	 *     pre_filter_shard_size: integer, // Defines a threshold that enforces a pre-filter roundtrip to prefilter search shards based on query rewriting if the number of shards the search request expands to exceeds the threshold. This filter roundtrip can limit the number of shards significantly if for instance a shard can not match any documents based on its rewrite method i.e., if date filters are mandatory to match but the shard bounds and the query are disjoint.
+	 *     max_concurrent_searches: int, // Maximum number of concurrent searches the multi search API can execute.
+	 *     max_concurrent_shard_requests: int, // Maximum number of concurrent shard requests that each sub-search request executes per node.
+	 *     pre_filter_shard_size: int, // Defines a threshold that enforces a pre-filter roundtrip to prefilter search shards based on query rewriting if the number of shards the search request expands to exceeds the threshold. This filter roundtrip can limit the number of shards significantly if for instance a shard can not match any documents based on its rewrite method i.e., if date filters are mandatory to match but the shard bounds and the query are disjoint.
 	 *     rest_total_hits_as_int: bool, // If true, hits.total are returned as an integer in the response. Defaults to false, which returns an object.
 	 *     routing: string, // Custom routing value used to route search operations to a specific shard.
 	 *     search_type: string, // Indicates whether global term and document frequencies should be used when scoring returned documents.
@@ -1141,7 +1147,7 @@ trait ClientEndpointsTrait
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     ccs_minimize_roundtrips: bool, // If `true`, network round-trips are minimized for cross-cluster search requests.
-	 *     max_concurrent_searches: integer, // Maximum number of concurrent searches the API can run.
+	 *     max_concurrent_searches: int, // Maximum number of concurrent searches the API can run.
 	 *     search_type: string, // The type of the search operation.Available options: `query_then_fetch`, `dfs_query_then_fetch`.
 	 *     rest_total_hits_as_int: bool, // If `true`, the response returns `hits.total` as an integer.If `false`, it returns `hits.total` as an object.
 	 *     typed_keys: bool, // If `true`, the response prefixes aggregation and suggester names with their respective types.
@@ -1209,7 +1215,7 @@ trait ClientEndpointsTrait
 	 *     realtime: bool, // If true, the request is real-time as opposed to near-real-time.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     term_statistics: bool, // If true, the response includes term frequency and document frequency.
-	 *     version: integer, // If `true`, returns the document version as part of a hit.
+	 *     version: int, // If `true`, returns the document version as part of a hit.
 	 *     version_type: string, // Specific version type.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -1375,10 +1381,10 @@ trait ClientEndpointsTrait
 	): Elasticsearch|Promise
 	{
 		if (isset($context)) {
-			$url = '/_scripts/' . $this->encode($id) . '/' . $this->encode($context) . '';
+			$url = '/_scripts/' . $this->encode($id) . '/' . $this->encode($context);
 			$method = 'PUT';
 		} else {
-			$url = '/_scripts/' . $this->encode($id) . '';
+			$url = '/_scripts/' . $this->encode($id);
 			$method = 'PUT';
 		}
 		$url = $this->addQueryString($url, $params, [
@@ -1468,9 +1474,9 @@ trait ClientEndpointsTrait
 	 *     refresh: bool, // If `true`, the request refreshes affected shards to make this operation visible to search.
 	 *     requests_per_second: float, // The throttle for this request in sub-requests per second.Defaults to no throttle.
 	 *     scroll: string|integer, // Specifies how long a consistent view of the index should be maintained for scrolled search.
-	 *     slices: integer|string, // The number of slices this task should be divided into.Defaults to 1 slice, meaning the task isn’t sliced into subtasks.
+	 *     slices: int|string, // The number of slices this task should be divided into.Defaults to 1 slice, meaning the task isn’t sliced into subtasks.
 	 *     timeout: string|integer, // Period each indexing waits for automatic index creation, dynamic mapping updates, and waiting for active shards.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     wait_for_completion: bool, // If `true`, the request blocks until the operation is complete.
 	 *     require_alias: bool, // If `true`, the destination must be an index alias.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
@@ -1540,7 +1546,7 @@ trait ClientEndpointsTrait
 	): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = '/_render/template/' . $this->encode($id) . '';
+			$url = '/_render/template/' . $this->encode($id);
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = "/_render/template";
@@ -1614,7 +1620,7 @@ trait ClientEndpointsTrait
 	public function scroll(string $scroll_id = null, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
 		if (isset($scroll_id)) {
-			$url = '/_search/scroll/' . $this->encode($scroll_id) . '';
+			$url = '/_search/scroll/' . $this->encode($scroll_id);
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = "/_search/scroll";
@@ -1652,7 +1658,7 @@ trait ClientEndpointsTrait
 	 *     allow_partial_search_results: bool, // If true, returns partial results if there are shard request timeouts or shard failures. If false, returns an error with no partial results.
 	 *     analyzer: string, // Analyzer to use for the query string.This parameter can only be used when the q query string parameter is specified.
 	 *     analyze_wildcard: bool, // If true, wildcard and prefix queries are analyzed.This parameter can only be used when the q query string parameter is specified.
-	 *     batched_reduce_size: integer, // The number of shard results that should be reduced at once on the coordinating node.This value should be used as a protection mechanism to reduce the memory overhead per search request if the potential number of shards in the request can be large.
+	 *     batched_reduce_size: int, // The number of shard results that should be reduced at once on the coordinating node.This value should be used as a protection mechanism to reduce the memory overhead per search request if the potential number of shards in the request can be large.
 	 *     ccs_minimize_roundtrips: bool, // If true, network round-trips between the coordinating node and the remote clusters are minimized when executing cross-cluster search (CCS) requests.
 	 *     default_operator: string, // The default operator for query string query: AND or OR.This parameter can only be used when the `q` query string parameter is specified.
 	 *     df: string, // Field to use as default where no field prefix is given in the query string.This parameter can only be used when the q query string parameter is specified.
@@ -1662,10 +1668,10 @@ trait ClientEndpointsTrait
 	 *     ignore_throttled: bool, // If `true`, concrete, expanded or aliased indices will be ignored when frozen.
 	 *     ignore_unavailable: bool, // If `false`, the request returns an error if it targets a missing or closed index.
 	 *     lenient: bool, // If `true`, format-based query failures (such as providing text to a numeric field) in the query string will be ignored.This parameter can only be used when the `q` query string parameter is specified.
-	 *     max_concurrent_shard_requests: integer, // Defines the number of concurrent shard requests per node this search executes concurrently.This value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests.
+	 *     max_concurrent_shard_requests: int, // Defines the number of concurrent shard requests per node this search executes concurrently.This value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests.
 	 *     min_compatible_shard_node: string, // The minimum version of the node that can handle the requestAny handling node with a lower version will fail the request.
 	 *     preference: string, // Nodes and shards used for the search.By default, Elasticsearch selects from eligible nodes and shards using adaptive replica selection, accounting for allocation awareness. Valid values are:`_only_local` to run the search only on shards on the local node;`_local` to, if possible, run the search on shards on the local node, or if not, select shards using the default method;`_only_nodes:<node-id>,<node-id>` to run the search on only the specified nodes IDs, where, if suitable shards exist on more than one selected node, use shards on those nodes using the default method, or if none of the specified nodes are available, select shards from any available node using the default method;`_prefer_nodes:<node-id>,<node-id>` to if possible, run the search on the specified nodes IDs, or if not, select shards using the default method;`_shards:<shard>,<shard>` to run the search only on the specified shards;`<custom-string>` (any string that does not start with `_`) to route searches with the same `<custom-string>` to the same shards in the same order.
-	 *     pre_filter_shard_size: integer, // Defines a threshold that enforces a pre-filter roundtrip to prefilter search shards based on query rewriting if the number of shards the search request expands to exceeds the threshold.This filter roundtrip can limit the number of shards significantly if for instance a shard can not match any documents based on its rewrite method (if date filters are mandatory to match but the shard bounds and the query are disjoint).When unspecified, the pre-filter phase is executed if any of these conditions is met:the request targets more than 128 shards;the request targets one or more read-only index;the primary sort of the query targets an indexed field.
+	 *     pre_filter_shard_size: int, // Defines a threshold that enforces a pre-filter roundtrip to prefilter search shards based on query rewriting if the number of shards the search request expands to exceeds the threshold.This filter roundtrip can limit the number of shards significantly if for instance a shard can not match any documents based on its rewrite method (if date filters are mandatory to match but the shard bounds and the query are disjoint).When unspecified, the pre-filter phase is executed if any of these conditions is met:the request targets more than 128 shards;the request targets one or more read-only index;the primary sort of the query targets an indexed field.
 	 *     request_cache: bool, // If `true`, the caching of search results is enabled for requests where `size` is `0`.Defaults to index level settings.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     scroll: string|integer, // Period to retain the search context for scrolling. See Scroll search results.By default, this value cannot exceed `1d` (24 hours).You can change this limit using the `search.max_keep_alive` cluster-level setting.
@@ -1674,11 +1680,11 @@ trait ClientEndpointsTrait
 	 *     stored_fields: string|array, // A comma-separated list of stored fields to return as part of a hit.If no fields are specified, no stored fields are included in the response.If this field is specified, the `_source` parameter defaults to `false`.You can pass `_source: true` to return both source fields and stored fields in the search response.
 	 *     suggest_field: string, // Specifies which field to use for suggestions.
 	 *     suggest_mode: string, // Specifies the suggest mode.This parameter can only be used when the `suggest_field` and `suggest_text` query string parameters are specified.
-	 *     suggest_size: integer, // Number of suggestions to return.This parameter can only be used when the `suggest_field` and `suggest_text` query string parameters are specified.
+	 *     suggest_size: int, // Number of suggestions to return.This parameter can only be used when the `suggest_field` and `suggest_text` query string parameters are specified.
 	 *     suggest_text: string, // The source text for which the suggestions should be returned.This parameter can only be used when the `suggest_field` and `suggest_text` query string parameters are specified.
-	 *     terminate_after: integer, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.Use with caution.Elasticsearch applies this parameter to each shard handling the request.When possible, let Elasticsearch perform early termination automatically.Avoid specifying this parameter for requests that target data streams with backing indices across multiple data tiers.If set to `0` (default), the query does not terminate early.
+	 *     terminate_after: int, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.Use with caution.Elasticsearch applies this parameter to each shard handling the request.When possible, let Elasticsearch perform early termination automatically.Avoid specifying this parameter for requests that target data streams with backing indices across multiple data tiers.If set to `0` (default), the query does not terminate early.
 	 *     timeout: string|integer, // Specifies the period of time to wait for a response from each shard.If no response is received before the timeout expires, the request fails and returns an error.
-	 *     track_total_hits: bool|integer, // Number of hits matching the query to count accurately.If `true`, the exact number of hits is returned at the cost of some performance.If `false`, the response does not include the total number of hits matching the query.
+	 *     track_total_hits: bool|int, // Number of hits matching the query to count accurately.If `true`, the exact number of hits is returned at the cost of some performance.If `false`, the response does not include the total number of hits matching the query.
 	 *     track_scores: bool, // If `true`, calculate and return document scores, even if the scores are not used for sorting.
 	 *     typed_keys: bool, // If `true`, aggregation and suggester names are be prefixed by their respective types in the response.
 	 *     rest_total_hits_as_int: bool, // Indicates whether `hits.total` should be rendered as an integer or an object in the rest search response.
@@ -1688,9 +1694,10 @@ trait ClientEndpointsTrait
 	 *     _source_includes: string|array, // A comma-separated list of source fields to include in the response.If this parameter is specified, only these source fields are returned.You can exclude fields from this subset using the `_source_excludes` query parameter.If the `_source` parameter is `false`, this parameter is ignored.
 	 *     seq_no_primary_term: bool, // If `true`, returns sequence number and primary term of the last modification of each hit.
 	 *     q: string, // Query in the Lucene query string syntax using query parameter search.Query parameter searches do not support the full Elasticsearch Query DSL but are handy for testing.
-	 *     size: integer, // Defines the number of hits to return.By default, you cannot page through more than 10,000 hits using the `from` and `size` parameters.To page through more hits, use the `search_after` parameter.
-	 *     from: integer, // Starting document offset.Needs to be non-negative.By default, you cannot page through more than 10,000 hits using the `from` and `size` parameters.To page through more hits, use the `search_after` parameter.
+	 *     size: int, // Defines the number of hits to return.By default, you cannot page through more than 10,000 hits using the `from` and `size` parameters.To page through more hits, use the `search_after` parameter.
+	 *     from: int, // Starting document offset.Needs to be non-negative.By default, you cannot page through more than 10,000 hits using the `from` and `size` parameters.To page through more hits, use the `search_after` parameter.
 	 *     sort: string|array, // A comma-separated list of <field>:<direction> pairs.
+	 *     force_synthetic_source: bool, // Should this request force synthetic _source?Use this to test if the mapping supports synthetic _source and to get a sense of the worst case performance.Fetches with this enabled will be slower the enabling synthetic source natively in the index.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -1761,6 +1768,7 @@ trait ClientEndpointsTrait
 			'size',
 			'from',
 			'sort',
+			'force_synthetic_source',
 			'pretty',
 			'human',
 			'error_trace',
@@ -1782,17 +1790,17 @@ trait ClientEndpointsTrait
 	 *
 	 * @param string|array $index Comma-separated list of data streams, indices, or aliases to search
 	 * @param string $field Field containing geospatial data to return
-	 * @param integer $zoom Zoom level for the vector tile to search
-	 * @param integer $x X coordinate for the vector tile to search
-	 * @param integer $y Y coordinate for the vector tile to search
+	 * @param int $zoom Zoom level for the vector tile to search
+	 * @param int $x X coordinate for the vector tile to search
+	 * @param int $y Y coordinate for the vector tile to search
 	 * @param array|string $body The request body
 	 * @param array{
 	 *     exact_bounds: bool, // If false, the meta layer’s feature is the bounding box of the tile.If true, the meta layer’s feature is a bounding box resulting from ageo_bounds aggregation. The aggregation runs on <field> values that intersectthe <zoom>/<x>/<y> tile with wrap_longitude set to false. The resultingbounding box may be larger than the vector tile.
-	 *     extent: integer, // Size, in pixels, of a side of the tile. Vector tiles are square with equal sides.
+	 *     extent: int, // Size, in pixels, of a side of the tile. Vector tiles are square with equal sides.
 	 *     grid_agg: string, // Aggregation used to create a grid for `field`.
-	 *     grid_precision: integer, // Additional zoom levels available through the aggs layer. For example, if <zoom> is 7and grid_precision is 8, you can zoom in up to level 15. Accepts 0-8. If 0, resultsdon’t include the aggs layer.
+	 *     grid_precision: int, // Additional zoom levels available through the aggs layer. For example, if <zoom> is 7and grid_precision is 8, you can zoom in up to level 15. Accepts 0-8. If 0, resultsdon’t include the aggs layer.
 	 *     grid_type: string, // Determines the geometry type for features in the aggs layer. In the aggs layer,each feature represents a geotile_grid cell. If 'grid' each feature is a Polygonof the cells bounding box. If 'point' each feature is a Point that is the centroidof the cell.
-	 *     size: integer, // Maximum number of features to return in the hits layer. Accepts 0-10000.If 0, results don’t include the hits layer.
+	 *     size: int, // Maximum number of features to return in the hits layer. Accepts 0-10000.If 0, results don’t include the hits layer.
 	 *     with_labels: bool, // If `true`, the hits and aggs layers will contain additional point features representingsuggested label positions for the original features.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -1817,7 +1825,7 @@ trait ClientEndpointsTrait
 	): Elasticsearch|Promise
 	{
 		$index = $this->convertValue($index);
-		$url = '/' . $this->encode($index) . '/_mvt/' . $this->encode($field) . '/' . $this->encode($zoom) . '/' . $this->encode($x) . '/' . $this->encode($y) . '';
+		$url = '/' . $this->encode($index) . '/_mvt/' . $this->encode($field) . '/' . $this->encode($zoom) . '/' . $this->encode($x) . '/' . $this->encode($y);
 		$method = empty($body) ? 'GET' : 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'exact_bounds',
@@ -1968,7 +1976,7 @@ trait ClientEndpointsTrait
 	 *     realtime: bool, // If true, the request is real-time as opposed to near-real-time.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     term_statistics: bool, // If `true`, the response includes term frequency and document frequency.
-	 *     version: integer, // If `true`, returns the document version as part of a hit.
+	 *     version: int, // If `true`, returns the document version as part of a hit.
 	 *     version_type: string, // Specific version type.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -1990,7 +1998,7 @@ trait ClientEndpointsTrait
 	): Elasticsearch|Promise
 	{
 		if (isset($id)) {
-			$url = '/' . $this->encode($index) . '/_termvectors/' . $this->encode($id) . '';
+			$url = '/' . $this->encode($index) . '/_termvectors/' . $this->encode($id);
 			$method = empty($body) ? 'GET' : 'POST';
 		} else {
 			$url = '/' . $this->encode($index) . '/_termvectors';
@@ -2031,15 +2039,15 @@ trait ClientEndpointsTrait
 	 * @param string $index The name of the index
 	 * @param array|string $body The request body
 	 * @param array{
-	 *     if_primary_term: integer, // Only perform the operation if the document has this primary term.
-	 *     if_seq_no: integer, // Only perform the operation if the document has this sequence number.
+	 *     if_primary_term: int, // Only perform the operation if the document has this primary term.
+	 *     if_seq_no: int, // Only perform the operation if the document has this sequence number.
 	 *     lang: string, // The script language.
 	 *     refresh: string, // If 'true', Elasticsearch refreshes the affected shards to make this operationvisible to search, if 'wait_for' then wait for a refresh to make this operationvisible to search, if 'false' do nothing with refreshes.
 	 *     require_alias: bool, // If true, the destination must be an index alias.
-	 *     retry_on_conflict: integer, // Specify how many times should the operation be retried when a conflict occurs.
+	 *     retry_on_conflict: int, // Specify how many times should the operation be retried when a conflict occurs.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     timeout: string|integer, // Period to wait for dynamic mapping updates and active shards.This guarantees Elasticsearch waits for at least the timeout before failing.The actual wait time could be longer, particularly when multiple waits occur.
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operations.Set to 'all' or any positive integer up to the total number of shards in the index(number_of_replicas+1). Defaults to 1 meaning the primary shard.
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operations.Set to 'all' or any positive integer up to the total number of shards in the index(number_of_replicas+1). Defaults to 1 meaning the primary shard.
 	 *     _source: bool|string, // Set to false to disable source retrieval. You can also specify a comma-separatedlist of the fields you want to retrieve.
 	 *     _source_excludes: string|array, // Specify the source fields you want to exclude.
 	 *     _source_includes: string|array, // Specify the source fields you want to retrieve.
@@ -2057,7 +2065,7 @@ trait ClientEndpointsTrait
 	 */
 	public function update(string $id, string $index, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/' . $this->encode($index) . '/_update/' . $this->encode($id) . '';
+		$url = '/' . $this->encode($index) . '/_update/' . $this->encode($id);
 		$method = 'POST';
 		$url = $this->addQueryString($url, $params, [
 			'if_primary_term',
@@ -2087,7 +2095,8 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Performs an update on every document in the index without changing the source,
+	 * Updates documents that match the specified query. If no query is specified,
+	 *  performs an update on every document in the index without changing the source,
 	 * for example to pick up a mapping change.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-update-by-query.html
@@ -2104,10 +2113,10 @@ trait ClientEndpointsTrait
 	 *     default_operator: string, // The default operator for query string query: `AND` or `OR`.
 	 *     df: string, // Field to use as default where no field prefix is given in the query string.
 	 *     expand_wildcards: string|array, // Type of index that wildcard patterns can match.If the request can target data streams, this argument determines whether wildcard expressions match hidden data streams.Supports comma-separated values, such as `open,hidden`.Valid values are: `all`, `open`, `closed`, `hidden`, `none`.
-	 *     from: integer, // Starting offset (default: 0)
+	 *     from: int, // Starting offset (default: 0)
 	 *     ignore_unavailable: bool, // If `false`, the request returns an error if it targets a missing or closed index.
 	 *     lenient: bool, // If `true`, format-based query failures (such as providing text to a numeric field) in the query string will be ignored.
-	 *     max_docs: integer, // Maximum number of documents to process.Defaults to all documents.
+	 *     max_docs: int, // Maximum number of documents to process.Defaults to all documents.
 	 *     pipeline: string, // ID of the pipeline to use to preprocess incoming documents.If the index has a default ingest pipeline specified, then setting the value to `_none` disables the default ingest pipeline for this request.If a final pipeline is configured it will always run, regardless of the value of this parameter.
 	 *     preference: string, // Specifies the node or shard the operation should be performed on.Random by default.
 	 *     refresh: bool, // If `true`, Elasticsearch refreshes affected shards to make the operation visible to search.
@@ -2115,17 +2124,17 @@ trait ClientEndpointsTrait
 	 *     requests_per_second: float, // The throttle for this request in sub-requests per second.
 	 *     routing: string, // Custom value used to route operations to a specific shard.
 	 *     scroll: string|integer, // Period to retain the search context for scrolling.
-	 *     scroll_size: integer, // Size of the scroll request that powers the operation.
+	 *     scroll_size: int, // Size of the scroll request that powers the operation.
 	 *     search_timeout: string|integer, // Explicit timeout for each search request.
 	 *     search_type: string, // The type of the search operation. Available options: `query_then_fetch`, `dfs_query_then_fetch`.
-	 *     slices: integer|string, // The number of slices this task should be divided into.
+	 *     slices: int|string, // The number of slices this task should be divided into.
 	 *     sort: array, // A comma-separated list of <field>:<direction> pairs.
 	 *     stats: array, // Specific `tag` of the request for logging and statistical purposes.
-	 *     terminate_after: integer, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.Use with caution.Elasticsearch applies this parameter to each shard handling the request.When possible, let Elasticsearch perform early termination automatically.Avoid specifying this parameter for requests that target data streams with backing indices across multiple data tiers.
+	 *     terminate_after: int, // Maximum number of documents to collect for each shard.If a query reaches this limit, Elasticsearch terminates the query early.Elasticsearch collects documents before sorting.Use with caution.Elasticsearch applies this parameter to each shard handling the request.When possible, let Elasticsearch perform early termination automatically.Avoid specifying this parameter for requests that target data streams with backing indices across multiple data tiers.
 	 *     timeout: string|integer, // Period each update request waits for the following operations: dynamic mapping updates, waiting for active shards.
 	 *     version: bool, // If `true`, returns the document version as part of a hit.
 	 *     version_type: bool, // Should the document increment the version number (internal) on hit or not (reindex)
-	 *     wait_for_active_shards: integer|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
+	 *     wait_for_active_shards: int|string, // The number of shard copies that must be active before proceeding with the operation.Set to `all` or any positive integer up to the total number of shards in the index (`number_of_replicas+1`).
 	 *     wait_for_completion: bool, // If `true`, the request blocks until the operation is complete.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)

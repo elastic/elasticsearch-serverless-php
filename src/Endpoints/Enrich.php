@@ -49,7 +49,7 @@ class Enrich extends AbstractEndpoint
 	 */
 	public function deletePolicy(string $name, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_enrich/policy/' . $this->encode($name) . '';
+		$url = '/_enrich/policy/' . $this->encode($name);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -122,7 +122,7 @@ class Enrich extends AbstractEndpoint
 	{
 		$name = $this->convertValue($name);
 		if (isset($name)) {
-			$url = '/_enrich/policy/' . $this->encode($name) . '';
+			$url = '/_enrich/policy/' . $this->encode($name);
 			$method = 'GET';
 		} else {
 			$url = "/_enrich/policy";
@@ -158,7 +158,7 @@ class Enrich extends AbstractEndpoint
 	 */
 	public function putPolicy(string $name, array|string $body = [], array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_enrich/policy/' . $this->encode($name) . '';
+		$url = '/_enrich/policy/' . $this->encode($name);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

@@ -36,6 +36,7 @@ class Transform extends AbstractEndpoint
 	 * @param string $transform_id Identifier for the transform.
 	 * @param array{
 	 *     force: bool, // If this value is false, the transform must be stopped before it can be deleted. If true, the transform isdeleted regardless of its current state.
+	 *     delete_dest_index: bool, // If this value is true, the destination index is deleted together with the transform. If false, the destinationindex will not be deleted
 	 *     timeout: string|integer, // Period to wait for a response. If no response is received before the timeout expires, the request fails and returns an error.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -51,10 +52,11 @@ class Transform extends AbstractEndpoint
 	 */
 	public function deleteTransform(string $transform_id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_transform/' . $this->encode($transform_id) . '';
+		$url = '/_transform/' . $this->encode($transform_id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, [
 			'force',
+			'delete_dest_index',
 			'timeout',
 			'pretty',
 			'human',
@@ -80,8 +82,8 @@ class Transform extends AbstractEndpoint
 	 * `<transform_id>`.
 	 * @param array{
 	 *     allow_no_match: bool, // Specifies what to do when the request:1. Contains wildcard expressions and there are no transforms that match.2. Contains the _all string or no identifiers and there are no matches.3. Contains wildcard expressions and there are only partial matches.If this parameter is false, the request returns a 404 status code whenthere are no matches or only partial matches.
-	 *     from: integer, // Skips the specified number of transforms.
-	 *     size: integer, // Specifies the maximum number of transforms to obtain.
+	 *     from: int, // Skips the specified number of transforms.
+	 *     size: int, // Specifies the maximum number of transforms to obtain.
 	 *     exclude_generated: bool, // Excludes fields that were automatically added when creating thetransform. This allows the configuration to be in an acceptable format tobe retrieved and then added to another cluster.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -99,7 +101,7 @@ class Transform extends AbstractEndpoint
 	{
 		$transform_id = $this->convertValue($transform_id);
 		if (isset($transform_id)) {
-			$url = '/_transform/' . $this->encode($transform_id) . '';
+			$url = '/_transform/' . $this->encode($transform_id);
 			$method = 'GET';
 		} else {
 			$url = "/_transform";
@@ -134,8 +136,8 @@ class Transform extends AbstractEndpoint
 	 * `<transform_id>`.
 	 * @param array{
 	 *     allow_no_match: bool, // Specifies what to do when the request:1. Contains wildcard expressions and there are no transforms that match.2. Contains the _all string or no identifiers and there are no matches.3. Contains wildcard expressions and there are only partial matches.If this parameter is false, the request returns a 404 status code whenthere are no matches or only partial matches.
-	 *     from: integer, // Skips the specified number of transforms.
-	 *     size: integer, // Specifies the maximum number of transforms to obtain.
+	 *     from: int, // Skips the specified number of transforms.
+	 *     size: int, // Specifies the maximum number of transforms to obtain.
 	 *     timeout: string|integer, // Controls the time to wait for the stats
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -245,7 +247,7 @@ class Transform extends AbstractEndpoint
 		array $params = [],
 	): Elasticsearch|Promise
 	{
-		$url = '/_transform/' . $this->encode($transform_id) . '';
+		$url = '/_transform/' . $this->encode($transform_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, [
 			'defer_validation',

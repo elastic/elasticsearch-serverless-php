@@ -51,7 +51,7 @@ class Eql extends AbstractEndpoint
 	 */
 	public function delete(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_eql/search/' . $this->encode($id) . '';
+		$url = '/_eql/search/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -64,7 +64,7 @@ class Eql extends AbstractEndpoint
 	/**
 	 * Returns async results from previously executed Event Query Language (EQL) search
 	 *
-	 * @see  https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-search-api.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-search-api.html
 	 *
 	 * @param string $id Identifier for the search.
 	 * @param array{
@@ -84,7 +84,7 @@ class Eql extends AbstractEndpoint
 	 */
 	public function get(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_eql/search/' . $this->encode($id) . '';
+		$url = '/_eql/search/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'keep_alive',
@@ -105,7 +105,7 @@ class Eql extends AbstractEndpoint
 	/**
 	 * Returns the status of a previously submitted async or stored Event Query Language (EQL) search
 	 *
-	 * @see  https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-status-api.html
+	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-status-api.html
 	 *
 	 * @param string $id Identifier for the search.
 	 * @param array{
@@ -123,7 +123,7 @@ class Eql extends AbstractEndpoint
 	 */
 	public function getStatus(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_eql/search/status/' . $this->encode($id) . '';
+		$url = '/_eql/search/status/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [

@@ -49,7 +49,7 @@ class AsyncSearch extends AbstractEndpoint
 	 */
 	public function delete(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_async_search/' . $this->encode($id) . '';
+		$url = '/_async_search/' . $this->encode($id);
 		$method = 'DELETE';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -83,7 +83,7 @@ class AsyncSearch extends AbstractEndpoint
 	 */
 	public function get(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_async_search/' . $this->encode($id) . '';
+		$url = '/_async_search/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, [
 			'keep_alive',
@@ -123,7 +123,7 @@ class AsyncSearch extends AbstractEndpoint
 	 */
 	public function status(string $id, array $params = []): Elasticsearch|Promise
 	{
-		$url = '/_async_search/status/' . $this->encode($id) . '';
+		$url = '/_async_search/status/' . $this->encode($id);
 		$method = 'GET';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
 		$headers = [
@@ -148,7 +148,7 @@ class AsyncSearch extends AbstractEndpoint
 	 *     allow_partial_search_results: bool, // Indicate if an error should be returned if there is a partial search failure or timeout
 	 *     analyzer: string, // The analyzer to use for the query string
 	 *     analyze_wildcard: bool, // Specify whether wildcard and prefix queries should be analyzed (default: false)
-	 *     batched_reduce_size: integer, // Affects how often partial results become available, which happens whenever shard results are reduced.A partial reduction is performed every time the coordinating node has received a certain number of new shard responses (5 by default).
+	 *     batched_reduce_size: int, // Affects how often partial results become available, which happens whenever shard results are reduced.A partial reduction is performed every time the coordinating node has received a certain number of new shard responses (5 by default).
 	 *     ccs_minimize_roundtrips: bool, // The default value is the only supported value.
 	 *     default_operator: string, // The default operator for query string query (AND or OR)
 	 *     df: string, // The field to use as default where no field prefix is given in the query string
@@ -158,10 +158,10 @@ class AsyncSearch extends AbstractEndpoint
 	 *     ignore_throttled: bool, // Whether specified concrete, expanded or aliased indices should be ignored when throttled
 	 *     ignore_unavailable: bool, // Whether specified concrete indices should be ignored when unavailable (missing or closed)
 	 *     lenient: bool, // Specify whether format-based query failures (such as providing text to a numeric field) should be ignored
-	 *     max_concurrent_shard_requests: integer, // The number of concurrent shard requests per node this search executes concurrently. This value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests
+	 *     max_concurrent_shard_requests: int, // The number of concurrent shard requests per node this search executes concurrently. This value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests
 	 *     min_compatible_shard_node: string, //
 	 *     preference: string, // Specify the node or shard the operation should be performed on (default: random)
-	 *     pre_filter_shard_size: integer, // The default value cannot be changed, which enforces the execution of a pre-filter roundtrip to retrieve statistics from each shard so that the ones that surely don’t hold any document matching the query get skipped.
+	 *     pre_filter_shard_size: int, // The default value cannot be changed, which enforces the execution of a pre-filter roundtrip to retrieve statistics from each shard so that the ones that surely don’t hold any document matching the query get skipped.
 	 *     request_cache: bool, // Specify if request cache should be used for this request or not, defaults to true
 	 *     routing: string, // A comma-separated list of specific routing values
 	 *     scroll: string|integer, //
@@ -170,11 +170,11 @@ class AsyncSearch extends AbstractEndpoint
 	 *     stored_fields: string|array, // A comma-separated list of stored fields to return as part of a hit
 	 *     suggest_field: string, // Specifies which field to use for suggestions.
 	 *     suggest_mode: string, // Specify suggest mode
-	 *     suggest_size: integer, // How many suggestions to return in response
+	 *     suggest_size: int, // How many suggestions to return in response
 	 *     suggest_text: string, // The source text for which the suggestions should be returned.
-	 *     terminate_after: integer, // The maximum number of documents to collect for each shard, upon reaching which the query execution will terminate early.
+	 *     terminate_after: int, // The maximum number of documents to collect for each shard, upon reaching which the query execution will terminate early.
 	 *     timeout: string|integer, // Explicit operation timeout
-	 *     track_total_hits: bool|integer, // Indicate if the number of documents that match the query should be tracked. A number can also be specified, to accurately track the total hit count up to the number.
+	 *     track_total_hits: bool|int, // Indicate if the number of documents that match the query should be tracked. A number can also be specified, to accurately track the total hit count up to the number.
 	 *     track_scores: bool, // Whether to calculate and return scores even if they are not used for sorting
 	 *     typed_keys: bool, // Specify whether aggregation and suggester names should be prefixed by their respective types in the response
 	 *     rest_total_hits_as_int: bool, //
@@ -184,8 +184,8 @@ class AsyncSearch extends AbstractEndpoint
 	 *     _source_includes: string|array, // A list of fields to extract and return from the _source field
 	 *     seq_no_primary_term: bool, // Specify whether to return sequence number and primary term of the last modification of each hit
 	 *     q: string, // Query in the Lucene query string syntax
-	 *     size: integer, // Number of hits to return (default: 10)
-	 *     from: integer, // Starting offset (default: 0)
+	 *     size: int, // Number of hits to return (default: 10)
+	 *     from: int, // Starting offset (default: 0)
 	 *     sort: string|array, // A comma-separated list of <field>:<direction> pairs
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)

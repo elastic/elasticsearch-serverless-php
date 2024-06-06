@@ -2,8 +2,10 @@
 
 [![main](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml)
 
-This is the official Elastic client for the **Elasticsearch Serverless** service, still in private preview.
-If you're looking to develop your PHP application with the Elasticsearch Stack, you should look at the [Elasticsearch Client](https://github.com/elastic/elasticsearch-php) instead. If you're looking to develop your PHP application with Elastic Enterprise Search, you should look at the [Enterprise Search Client](https://github.com/elastic/enterprise-search-php/).
+This is the official Elastic client for the **Elasticsearch Serverless** service.
+
+If you're looking to develop your PHP application with the Elasticsearch Stack,
+you should look at the [Elasticsearch Client](https://github.com/elastic/elasticsearch-php) instead.
 
 ## Installation
 
@@ -24,10 +26,10 @@ Please remember that `alpha` releases are quite unstable, the code can change be
 Instead, a release candidate `rc` will not break the backward compatibility. Typically an `rc`
 version includes only bug fixes.
 
-### Instantiate a Client
+### Instantiate the client
 
-When you have installed elasticsearch-php you can start using it with the `Client`` class.
-You can use the ClientBuilder class to create this object:
+When you have installed elasticsearch-php you can start using it with the `Client` class.
+You can use the `ClientBuilder` to create this object:
 
 ```php
 require 'vendor/autoload.php';
@@ -51,10 +53,6 @@ page for a getting started guide.
 ## Development
 
 See [CONTRIBUTING](./CONTRIBUTING.md).
-
-### Docs
-
-Some questions, assumptions and general notes about this project can be found in [the docs directory](./docs/questions-and-assumptions.md).
 
 ## License 📗
 
