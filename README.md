@@ -6,7 +6,7 @@
 
 [![main](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml)
 
-This is the official Elastic client for the **Elasticsearch Serverless** service.
+This is the official Elastic client for the [Elasticsearch Cloud Serverless](https://www.elastic.co/elasticsearch/serverless).
 
 If you're looking to develop your PHP application with the Elasticsearch Stack,
 you should look at the [Elasticsearch Client](https://github.com/elastic/elasticsearch-php) instead.
@@ -18,17 +18,6 @@ You can install the library using [composer](https://getcomposer.org/) with the 
 ```bash
 composer require elastic/elasticsearch-serverless
 ```
-
-You need specify the version, if you want to install an `alpha` or `rc` release.
-For instance, if you want to install the latest alpha version:
-
-```bash
-composer require elastic/elasticsearch-serverless:*@alpha
-```
-
-Please remember that `alpha` releases are quite unstable, the code can change between releases.
-Instead, a release candidate `rc` will not break the backward compatibility. Typically an `rc`
-version includes only bug fixes.
 
 ### Instantiate the client
 
