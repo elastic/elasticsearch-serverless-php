@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="https://github.com/elastic/elasticsearch-py/raw/main/docs/logo-elastic-glyph-color.svg" width="20%" alt="Elastic logo" />
+</p>
+
 # Elasticsearch Serverless Client
 
 [![main](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml)
