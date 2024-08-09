@@ -99,7 +99,7 @@ class Enrich extends AbstractEndpoint
 
 
 	/**
-	 * Gets information about an enrich policy.
+	 * Returns information about an enrich policy.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/get-enrich-policy-api.html
 	 *
@@ -137,7 +137,7 @@ class Enrich extends AbstractEndpoint
 
 
 	/**
-	 * Creates a new enrich policy.
+	 * Creates an enrich policy.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/put-enrich-policy-api.html
 	 *
@@ -170,7 +170,7 @@ class Enrich extends AbstractEndpoint
 
 
 	/**
-	 * Gets enrich coordinator statistics and information about enrich policies that are currently executing.
+	 * Returns enrich coordinator statistics and information about enrich policies that are currently executing.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/enrich-stats-api.html
 	 *

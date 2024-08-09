@@ -29,7 +29,7 @@ use Http\Promise\Promise;
 class Graph extends AbstractEndpoint
 {
 	/**
-	 * Explore extracted and summarized information about the documents and terms in an index.
+	 * Extracts and summarizes information about the documents and terms in an Elasticsearch data stream or index.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/graph-explore-api.html
 	 *

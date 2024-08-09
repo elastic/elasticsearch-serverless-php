@@ -92,7 +92,7 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Returns the details about a search application.
+	 * Returns the details about a search application
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-search-application.html
 	 *
@@ -269,7 +269,7 @@ class SearchApplication extends AbstractEndpoint
 
 
 	/**
-	 * Perform a search against a search application
+	 * Perform a search against a search application.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-application-search.html
 	 *

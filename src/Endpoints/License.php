@@ -29,7 +29,8 @@ use Http\Promise\Promise;
 class License extends AbstractEndpoint
 {
 	/**
-	 * Retrieves licensing information for the cluster
+	 * This API returns information about the type of license, when it was issued, and when it expires, for example.
+	 * For more information about the different types of licenses, see https://www.elastic.co/subscriptions.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-license.html
 	 *

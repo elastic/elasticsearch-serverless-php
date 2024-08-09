@@ -22,7 +22,6 @@ use Elastic\Elasticsearch\Serverless\Endpoints\Cluster;
 use Elastic\Elasticsearch\Serverless\Endpoints\Connector;
 use Elastic\Elasticsearch\Serverless\Endpoints\Enrich;
 use Elastic\Elasticsearch\Serverless\Endpoints\Eql;
-use Elastic\Elasticsearch\Serverless\Endpoints\Esql;
 use Elastic\Elasticsearch\Serverless\Endpoints\Graph;
 use Elastic\Elasticsearch\Serverless\Endpoints\Indices;
 use Elastic\Elasticsearch\Serverless\Endpoints\Inference;
@@ -30,7 +29,7 @@ use Elastic\Elasticsearch\Serverless\Endpoints\Ingest;
 use Elastic\Elasticsearch\Serverless\Endpoints\License;
 use Elastic\Elasticsearch\Serverless\Endpoints\Logstash;
 use Elastic\Elasticsearch\Serverless\Endpoints\Ml;
-use Elastic\Elasticsearch\Serverless\Endpoints\QueryRuleset;
+use Elastic\Elasticsearch\Serverless\Endpoints\QueryRules;
 use Elastic\Elasticsearch\Serverless\Endpoints\SearchApplication;
 use Elastic\Elasticsearch\Serverless\Endpoints\Security;
 use Elastic\Elasticsearch\Serverless\Endpoints\Sql;
@@ -101,15 +100,6 @@ trait NamespaceTrait
 	}
 
 
-	public function esql(): Esql
-	{
-		if (!isset($this->namespace['Esql'])) {
-			$this->namespace['Esql'] = new Esql($this);
-		}
-		return $this->namespace['Esql'];
-	}
-
-
 	public function graph(): Graph
 	{
 		if (!isset($this->namespace['Graph'])) {
@@ -173,12 +163,12 @@ trait NamespaceTrait
 	}
 
 
-	public function queryRuleset(): QueryRuleset
+	public function queryRules(): QueryRules
 	{
-		if (!isset($this->namespace['QueryRuleset'])) {
-			$this->namespace['QueryRuleset'] = new QueryRuleset($this);
+		if (!isset($this->namespace['QueryRules'])) {
+			$this->namespace['QueryRules'] = new QueryRules($this);
 		}
-		return $this->namespace['QueryRuleset'];
+		return $this->namespace['QueryRules'];
 	}
 
 

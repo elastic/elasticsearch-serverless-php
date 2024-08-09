@@ -29,7 +29,11 @@ use Http\Promise\Promise;
 class Ml extends AbstractEndpoint
 {
 	/**
-	 * Closes one or more anomaly detection jobs. A job can be opened and closed multiple times throughout its lifecycle.
+	 * Close anomaly detection jobs
+	 * A job can be opened and closed multiple times throughout its lifecycle. A closed job cannot receive data or perform analysis operations, but you can still explore and navigate results.
+	 * When you close a job, it runs housekeeping tasks such as pruning the model history, flushing buffers, calculating final results and persisting the model snapshots. Depending upon the size of the job, it could take several minutes to close and the equivalent time to re-open. After it is closed, the job has a minimal overhead on the cluster except for maintaining its meta data. Therefore it is a best practice to close jobs that are no longer required to process data.
+	 * If you close an anomaly detection job whose datafeed is running, the request first tries to stop the datafeed. This behavior is equivalent to calling stop datafeed API with the same timeout and force parameters as the close job request.
+	 * When a datafeed that has a specified end date stops, it automatically closes its associated job.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/ml-close-job.html
 	 *
@@ -74,7 +78,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Deletes a calendar.
+	 * Removes all scheduled events from a calendar, then deletes it.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/ml-delete-calendar.html
 	 *
@@ -176,7 +180,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Deletes an existing data frame analytics job.
+	 * Deletes a data frame analytics job.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/delete-dfanalytics.html
 	 *
@@ -253,6 +257,8 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Deletes a filter.
+	 * If an anomaly detection job references the filter, you cannot delete the
+	 * filter. You must update or delete the job before you can delete the filter.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-delete-filter.html
 	 *
@@ -283,7 +289,14 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Deletes an existing anomaly detection job.
+	 * Deletes an anomaly detection job.
+	 *
+	 * All job configuration, model state and results are deleted.
+	 * It is not currently possible to delete multiple jobs using wildcards or a
+	 * comma separated list. If you delete a job that has a datafeed, the request
+	 * first tries to delete the datafeed. This behavior is equivalent to calling
+	 * the delete datafeed API with the same timeout and force parameters as the
+	 * delete job request.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-delete-job.html
 	 *
@@ -326,7 +339,8 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Deletes an existing trained inference model that is currently not referenced by an ingest pipeline.
+	 * Deletes an existing trained inference model that is currently not referenced
+	 * by an ingest pipeline.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-trained-models.html
 	 *
@@ -358,7 +372,10 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Deletes a model alias that refers to the trained model
+	 * Deletes a trained model alias.
+	 * This API deletes an existing model alias that refers to a trained model. If
+	 * the model alias is missing or refers to a model other than the one identified
+	 * by the `model_id`, this API returns an error.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/delete-trained-models-aliases.html
 	 *
@@ -395,7 +412,9 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Estimates the model memory
+	 * Makes an estimation of the memory usage for an anomaly detection job model.
+	 * It is based on analysis configuration details for the job and cardinality
+	 * estimates for the fields it references.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-apis.html
 	 *
@@ -428,6 +447,10 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Evaluates the data frame analytics for an annotated index.
+	 * The API packages together commonly used evaluation metrics for various types
+	 * of machine learning features. This has been designed for use on indexes
+	 * created by data frame analytics. Evaluation requires both a ground truth
+	 * field and an analytics result field to be present.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/evaluate-dfanalytics.html
 	 *
@@ -460,6 +483,14 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Forces any buffered data to be processed by the job.
+	 * The flush jobs API is only applicable when sending data for analysis using
+	 * the post data API. Depending on the content of the buffer, then it might
+	 * additionally calculate new results. Both flush and close operations are
+	 * similar, however the flush is more efficient if you are expecting to send
+	 * more data for analysis. When flushing, the job remains open and is available
+	 * to continue analyzing data. A close operation additionally prunes and
+	 * persists the model state to disk and the job must be opened again before
+	 * analyzing further data.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-flush-job.html
 	 *
@@ -600,6 +631,9 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Retrieves configuration information for data frame analytics jobs.
+	 * You can get information for multiple data frame analytics jobs in a single
+	 * API request by using a comma-separated list of data frame analytics jobs or a
+	 * wildcard expression.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/get-dfanalytics.html
 	 *
@@ -704,6 +738,12 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Retrieves usage information for datafeeds.
+	 * You can get statistics for multiple datafeeds in a single API request by
+	 * using a comma-separated list of datafeeds or a wildcard expression. You can
+	 * get statistics for all datafeeds by using `_all`, by specifying `*` as the
+	 * `<feed_id>`, or by omitting the `<feed_id>`. If the datafeed is stopped, the
+	 * only information you receive is the `datafeed_id` and the `state`.
+	 * This API returns a maximum of 10,000 datafeeds.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-datafeed-stats.html
 	 *
@@ -744,6 +784,11 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Retrieves configuration information for datafeeds.
+	 * You can get information for multiple datafeeds in a single API request by
+	 * using a comma-separated list of datafeeds or a wildcard expression. You can
+	 * get information for all datafeeds by using `_all`, by specifying `*` as the
+	 * `<feed_id>`, or by omitting the `<feed_id>`.
+	 * This API returns a maximum of 10,000 datafeeds.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-datafeed.html
 	 *
@@ -793,6 +838,7 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Retrieves filters.
+	 * You can get a single filter or all filters.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-filter.html
 	 *
@@ -872,6 +918,10 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Retrieves configuration information for anomaly detection jobs.
+	 * You can get information for multiple anomaly detection jobs in a single API
+	 * request by using a group name, a comma-separated list of jobs, or a wildcard
+	 * expression. You can get information for all anomaly detection jobs by using
+	 * `_all`, by specifying `*` as the `<job_id>`, or by omitting the `<job_id>`.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-job.html
 	 *
@@ -920,7 +970,23 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves overall bucket results that summarize the bucket results of multiple anomaly detection jobs.
+	 * Retrieves overall bucket results that summarize the bucket results of
+	 * multiple anomaly detection jobs.
+	 *
+	 * The `overall_score` is calculated by combining the scores of all the
+	 * buckets within the overall bucket span. First, the maximum
+	 * `anomaly_score` per anomaly detection job in the overall bucket is
+	 * calculated. Then the `top_n` of those scores are averaged to result in
+	 * the `overall_score`. This means that you can fine-tune the
+	 * `overall_score` so that it is more or less sensitive to the number of
+	 * jobs that detect an anomaly at the same time. For example, if you set
+	 * `top_n` to `1`, the `overall_score` is the maximum bucket score in the
+	 * overall bucket. Alternatively, if you set `top_n` to the number of jobs,
+	 * the `overall_score` is high only when all jobs detect anomalies in that
+	 * overall bucket. If you set the `bucket_span` parameter (to a value
+	 * greater than its default), the `overall_score` is the maximum
+	 * `overall_score` of the overall buckets that have a span equal to the
+	 * jobs' largest bucket span.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-get-overall-buckets.html
 	 *
@@ -978,11 +1044,15 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves configuration information for a trained inference model.
+	 * Retrieves configuration information for a trained model.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/get-trained-models.html
 	 *
-	 * @param string $model_id The unique identifier of the trained model.
+	 * @param string|array $model_id The unique identifier of the trained model or a model alias.
+	 *
+	 * You can get information for multiple trained models in a single API
+	 * request by using a comma-separated list of model IDs or a wildcard
+	 * expression.
 	 * @param array{
 	 *     allow_no_match: bool, // Specifies what to do when the request:- Contains wildcard expressions and there are no models that match.- Contains the _all string or no identifiers and there are no matches.- Contains wildcard expressions and there are only partial matches.If true, it returns an empty array when there are no matches and thesubset of results when there are partial matches.
 	 *     decompress_definition: bool, // Specifies whether the included model definition should be returned as aJSON map (true) or in a custom compressed format (false).
@@ -990,7 +1060,7 @@ class Ml extends AbstractEndpoint
 	 *     from: int, // Skips the specified number of models.
 	 *     include: string, // A comma delimited string of optional fields to include in the responsebody.
 	 *     size: int, // Specifies the maximum number of models to obtain.
-	 *     tags: string, // A comma delimited string of tags. A trained model can have many tags, ornone. When supplied, only trained models that contain all the suppliedtags are returned.
+	 *     tags: string|array, // A comma delimited string of tags. A trained model can have many tags, ornone. When supplied, only trained models that contain all the suppliedtags are returned.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -1003,8 +1073,9 @@ class Ml extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function getTrainedModels(string $model_id = null, array $params = []): Elasticsearch|Promise
+	public function getTrainedModels(string|array $model_id = null, array $params = []): Elasticsearch|Promise
 	{
+		$model_id = $this->convertValue($model_id);
 		if (isset($model_id)) {
 			$url = '/_ml/trained_models/' . $this->encode($model_id);
 			$method = 'GET';
@@ -1034,7 +1105,8 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves usage information for trained inference models.
+	 * Retrieves usage information for trained models. You can get usage information for multiple trained
+	 * models in a single API request by using a comma-separated list of model IDs or a wildcard expression.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/get-trained-models-stats.html
 	 *
@@ -1084,7 +1156,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Evaluate a trained model.
+	 * Evaluates a trained model.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/infer-trained-model.html
 	 *
@@ -1123,6 +1195,13 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Opens one or more anomaly detection jobs.
+	 * An anomaly detection job must be opened in order for it to be ready to
+	 * receive and analyze data. It can be opened and closed multiple times
+	 * throughout its lifecycle.
+	 * When you open a new job, it starts with an empty model.
+	 * When you open an existing job, the most recent model state is automatically
+	 * loaded. The job is ready to resume its analysis from where it left off, once
+	 * new data is received.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-open-job.html
 	 *
@@ -1156,7 +1235,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Posts scheduled events in a calendar.
+	 * Adds scheduled events to a calendar.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-post-calendar-event.html
 	 *
@@ -1193,7 +1272,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Previews that will be analyzed given a data frame analytics config.
+	 * Previews the extracted features used by a data frame analytics config.
 	 *
 	 * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/preview-dfanalytics.html
 	 *
@@ -1236,6 +1315,14 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Previews a datafeed.
+	 * This API returns the first "page" of search results from a datafeed.
+	 * You can preview an existing datafeed or provide configuration details for a datafeed
+	 * and anomaly detection job in the API. The preview shows the structure of the data
+	 * that will be passed to the anomaly detection engine.
+	 * IMPORTANT: When Elasticsearch security features are enabled, the preview uses the credentials of the user that
+	 * called the API. However, when the datafeed starts it uses the roles of the last user that created or updated the
+	 * datafeed. To get a preview that accurately reflects the behavior of the datafeed, use the appropriate credentials.
+	 * You can also use secondary authorization headers to supply the credentials.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-preview-datafeed.html
 	 *
@@ -1282,7 +1369,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Instantiates a calendar.
+	 * Creates a calendar.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-calendar.html
 	 *
@@ -1320,7 +1407,7 @@ class Ml extends AbstractEndpoint
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-calendar-job.html
 	 *
 	 * @param string $calendar_id A string that uniquely identifies a calendar.
-	 * @param string $job_id An identifier for the anomaly detection jobs. It can be a job identifier, a group name, or a comma-separated list of jobs or groups.
+	 * @param string|array $job_id An identifier for the anomaly detection jobs. It can be a job identifier, a group name, or a comma-separated list of jobs or groups.
 	 * @param array{
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
@@ -1334,8 +1421,9 @@ class Ml extends AbstractEndpoint
 	 * @throws ClientResponseException if the status code of response is 4xx
 	 * @throws ServerResponseException if the status code of response is 5xx
 	 */
-	public function putCalendarJob(string $calendar_id, string $job_id, array $params = []): Elasticsearch|Promise
+	public function putCalendarJob(string $calendar_id, string|array $job_id, array $params = []): Elasticsearch|Promise
 	{
+		$job_id = $this->convertValue($job_id);
 		$url = '/_ml/calendars/' . $this->encode($calendar_id) . '/jobs/' . $this->encode($job_id);
 		$method = 'PUT';
 		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
@@ -1348,6 +1436,8 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Instantiates a data frame analytics job.
+	 * This API creates a data frame analytics job that performs an analysis on the
+	 * source indices and stores the outcome in a destination index.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/put-dfanalytics.html
 	 *
@@ -1383,6 +1473,15 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Instantiates a datafeed.
+	 * Datafeeds retrieve data from Elasticsearch for analysis by an anomaly detection job.
+	 * You can associate only one datafeed with each anomaly detection job.
+	 * The datafeed contains a query that runs at a defined interval (`frequency`).
+	 * If you are concerned about delayed data, you can add a delay (`query_delay') at each interval.
+	 * When Elasticsearch security features are enabled, your datafeed remembers which roles the user who created it had
+	 * at the time of creation and runs the query using those same roles. If you provide secondary authorization headers,
+	 * those credentials are used instead.
+	 * You must use Kibana, this API, or the create anomaly detection jobs API to create a datafeed. Do not add a datafeed
+	 * directly to the `.ml-config` index. Do not give users `write` privileges on the `.ml-config` index.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-datafeed.html
 	 *
@@ -1432,6 +1531,8 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Instantiates a filter.
+	 * A filter contains a list of strings. It can be used by one or more anomaly detection jobs.
+	 * Specifically, filters are referenced in the `custom_rules` property of detector configuration objects.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-filter.html
 	 *
@@ -1464,7 +1565,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Instantiates an anomaly detection job.
+	 * Instantiates an anomaly detection job. If you include a `datafeed_config`, you must have read index privileges on the source index.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-put-job.html
 	 *
@@ -1497,7 +1598,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Creates an inference trained model.
+	 * Enables you to supply a trained model that is not created by data frame analytics.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-models.html
 	 *
@@ -1540,7 +1641,22 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Creates a new model alias (or reassigns an existing one) to refer to the trained model
+	 * Creates or updates a trained model alias. A trained model alias is a logical
+	 * name used to reference a single trained model.
+	 * You can use aliases instead of trained model identifiers to make it easier to
+	 * reference your models. For example, you can use aliases in inference
+	 * aggregations and processors.
+	 * An alias must be unique and refer to only a single trained model. However,
+	 * you can have multiple aliases for each trained model.
+	 * If you use this API to update an alias such that it references a different
+	 * trained model ID and the model uses a different type of data frame analytics,
+	 * an error occurs. For example, this situation occurs if you have a trained
+	 * model for regression analysis and a trained model for classification
+	 * analysis; you cannot reassign an alias from one type of trained model to
+	 * another.
+	 * If you use this API to update an alias and there are very few input fields in
+	 * common between the old and new trained models for the model alias, the API
+	 * returns a warning.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-models-aliases.html
 	 *
@@ -1578,7 +1694,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Creates part of a trained model definition
+	 * Creates part of a trained model definition.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-model-definition-part.html
 	 *
@@ -1618,7 +1734,9 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Creates a trained model vocabulary
+	 * Creates a trained model vocabulary.
+	 * This API is supported only for natural language processing (NLP) models.
+	 * The vocabulary is stored in the index as described in `inference_config.*.vocabulary` of the trained model definition.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/put-trained-model-vocabulary.html
 	 *
@@ -1655,7 +1773,11 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Resets an existing anomaly detection job.
+	 * Resets an anomaly detection job.
+	 * All model state and results are deleted. The job is ready to start over as if
+	 * it had just been created.
+	 * It is not currently possible to reset multiple jobs using wildcards or a
+	 * comma separated list.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-reset-job.html
 	 *
@@ -1697,6 +1819,17 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Starts a data frame analytics job.
+	 * A data frame analytics job can be started and stopped multiple times
+	 * throughout its lifecycle.
+	 * If the destination index does not exist, it is created automatically the
+	 * first time you start the data frame analytics job. The
+	 * `index.number_of_shards` and `index.number_of_replicas` settings for the
+	 * destination index are copied from the source index. If there are multiple
+	 * source indices, the destination index copies the highest setting values. The
+	 * mappings for the destination index are also copied from the source indices.
+	 * If there are any mapping conflicts, the job fails to start.
+	 * If the destination index exists, it is used as is. You can therefore set up
+	 * the destination index in advance with custom settings and mappings.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/start-dfanalytics.html
 	 *
@@ -1732,6 +1865,18 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Starts one or more datafeeds.
+	 *
+	 * A datafeed must be started in order to retrieve data from Elasticsearch. A datafeed can be started and stopped
+	 * multiple times throughout its lifecycle.
+	 *
+	 * Before you can start a datafeed, the anomaly detection job must be open. Otherwise, an error occurs.
+	 *
+	 * If you restart a stopped datafeed, it continues processing input data from the next millisecond after it was stopped.
+	 * If new data was indexed for that exact millisecond between stopping and starting, it will be ignored.
+	 *
+	 * When Elasticsearch security features are enabled, your datafeed remembers which roles the last user to create or
+	 * update it had at the time of creation or update and runs the query using those same roles. If you provided secondary
+	 * authorization headers when you created or updated the datafeed, those credentials are used instead.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-start-datafeed.html
 	 *
@@ -1782,7 +1927,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Start a trained model deployment.
+	 * Starts a trained model deployment, which allocates the model to every machine learning node.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/start-trained-model-deployment.html
 	 *
@@ -1837,6 +1982,8 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Stops one or more data frame analytics jobs.
+	 * A data frame analytics job can be started and stopped multiple times
+	 * throughout its lifecycle.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/stop-dfanalytics.html
 	 *
@@ -1883,6 +2030,8 @@ class Ml extends AbstractEndpoint
 
 	/**
 	 * Stops one or more datafeeds.
+	 * A datafeed that is stopped ceases to retrieve data from Elasticsearch. A datafeed can be started and stopped
+	 * multiple times throughout its lifecycle.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-stop-datafeed.html
 	 *
@@ -1929,7 +2078,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Stop a trained model deployment.
+	 * Stops a trained model deployment.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/stop-trained-model-deployment.html
 	 *
@@ -1971,7 +2120,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Updates certain properties of a data frame analytics job.
+	 * Updates an existing data frame analytics job.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/update-dfanalytics.html
 	 *
@@ -2010,7 +2159,11 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Updates certain properties of a datafeed.
+	 * Updates the properties of a datafeed.
+	 * You must stop and start the datafeed for the changes to be applied.
+	 * When Elasticsearch security features are enabled, your datafeed remembers which roles the user who updated it had at
+	 * the time of the update and runs the query using those same roles. If you provide secondary authorization headers,
+	 * those credentials are used instead.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-update-datafeed.html
 	 *
@@ -2063,7 +2216,7 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Updates the description of a filter, adds items, or removes items.
+	 * Updates the description of a filter, adds items, or removes items from the list.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/ml-update-filter.html
 	 *
@@ -2129,13 +2282,14 @@ class Ml extends AbstractEndpoint
 
 
 	/**
-	 * Updates certain properties of trained model deployment.
+	 * Starts a trained model deployment, which allocates the model to every machine learning node.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/update-trained-model-deployment.html
 	 *
 	 * @param string $model_id The unique identifier of the trained model. Currently, only PyTorch models are supported.
 	 * @param array|string $body The request body
 	 * @param array{
+	 *     number_of_allocations: int, // The number of model allocations on each node where the model is deployed.All allocations on a node share the same copy of the model in memory but usea separate set of threads to evaluate the model.Increasing this value generally increases the throughput.If this setting is greater than the number of hardware threadsit will automatically be changed to a value less than the number of hardware threads.
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -2156,7 +2310,14 @@ class Ml extends AbstractEndpoint
 	{
 		$url = '/_ml/trained_models/' . $this->encode($model_id) . '/deployment/_update';
 		$method = 'POST';
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$url = $this->addQueryString($url, $params, [
+			'number_of_allocations',
+			'pretty',
+			'human',
+			'error_trace',
+			'source',
+			'filter_path',
+		]);
 		$headers = [
 		    'Accept' => 'application/json',
 		    'Content-Type' => 'application/json'

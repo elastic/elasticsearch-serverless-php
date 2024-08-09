@@ -77,7 +77,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Performs the analysis process on a text and return the tokens breakdown of the text.
+	 * Performs analysis on a text string and returns the resulting tokens.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/indices-analyze.html
 	 *
@@ -117,7 +117,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Creates an index with optional settings and mappings.
+	 * Creates a new index.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/indices-create-index.html
 	 *
@@ -162,7 +162,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Creates a data stream
+	 * Creates a data stream.
+	 * You must have a matching index template with data stream enabled.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html
 	 *
@@ -198,7 +199,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Provides statistics on operations happening in a data stream.
+	 * Retrieves statistics for one or more data streams.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html
 	 *
@@ -244,7 +245,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Deletes an index.
+	 * Deletes one or more indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-delete-index.html
 	 *
@@ -295,7 +296,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Deletes an alias.
+	 * Removes a data stream or index from an alias.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-aliases.html
 	 *
@@ -341,7 +342,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Deletes the data stream lifecycle of the selected data streams.
+	 * Removes the data lifecycle from a data stream rendering it not managed by the data stream lifecycle
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams-delete-lifecycle.html
 	 *
@@ -385,7 +386,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Deletes a data stream.
+	 * Deletes one or more data streams and their backing indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html
 	 *
@@ -425,7 +426,10 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Deletes an index template.
+	 * Delete an index template.
+	 * The provided <index-template> may contain multiple template names separated by a comma. If multiple template
+	 * names are specified then there is no wildcard support and the provided names should match completely with
+	 * existing templates.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-delete-template.html
 	 *
@@ -467,7 +471,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns information about whether a particular index exists.
+	 * Checks if a data stream, index, or alias exists.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-exists.html
 	 *
@@ -517,7 +521,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns information about whether a particular alias exists.
+	 * Checks if an alias exists.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-aliases.html
 	 *
@@ -649,7 +653,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns information about one or more indices.
+	 * Returns information about one or more indices. For data streams, the API returns information about the
+	 * stream’s backing indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-get-index.html
 	 *
@@ -704,7 +709,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns an alias.
+	 * Retrieves information for one or more aliases.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-aliases.html
 	 *
@@ -771,7 +776,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns the data stream lifecycle of the selected data streams.
+	 * Retrieves the data stream lifecycle configuration of one or more data streams.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams-get-lifecycle.html
 	 *
@@ -815,7 +820,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns data streams.
+	 * Retrieves information about one or more data streams.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html
 	 *
@@ -863,7 +868,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns an index template.
+	 * Get index templates.
+	 * Returns information about one or more index templates.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-get-template.html
 	 *
@@ -913,7 +919,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns mappings for one or more indices.
+	 * Retrieves mapping definitions for one or more indices.
+	 * For data streams, the API retrieves mappings for the stream’s backing indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-get-mapping.html
 	 *
@@ -968,7 +975,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns settings for one or more indices.
+	 * Returns setting information for one or more indices. For data streams,
+	 * returns setting information for the stream’s backing indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-get-settings.html
 	 *
@@ -1039,7 +1047,16 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Migrates an alias to a data stream
+	 * Converts an index alias to a data stream.
+	 * You must have a matching index template that is data stream enabled.
+	 * The alias must meet the following criteria:
+	 * The alias must have a write index;
+	 * All indices for the alias must have a `@timestamp` field mapping of a `date` or `date_nanos` field type;
+	 * The alias must not have any filters;
+	 * The alias must not use custom routing.
+	 * If successful, the request removes the alias and creates a data stream with the same name.
+	 * The indices for the alias become hidden backing indices for the stream.
+	 * The write index for the alias becomes the write index for the stream.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html
 	 *
@@ -1070,7 +1087,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Modifies a data stream
+	 * Performs one or more data stream modification actions in a single atomic operation.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams.html
 	 *
@@ -1102,7 +1119,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates an alias.
+	 * Adds a data stream or index to an alias.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-aliases.html
 	 *
@@ -1156,7 +1173,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Updates the data stream lifecycle of the selected data streams.
+	 * Update the data lifecycle of the specified data streams.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/data-streams-put-lifecycle.html
 	 *
@@ -1207,7 +1224,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates an index template.
+	 * Create or update an index template.
+	 * Index templates define settings, mappings, and aliases that can be applied automatically to new indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-put-template.html
 	 *
@@ -1252,7 +1270,9 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Updates the index mappings.
+	 * Adds new fields to an existing data stream or index.
+	 * You can also use this API to change the search settings of existing fields.
+	 * For data streams, these changes are applied to all backing indices by default.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-put-mapping.html
 	 *
@@ -1304,7 +1324,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Updates the index settings.
+	 * Changes a dynamic index setting in real time. For data streams, index setting
+	 * changes are applied to all backing indices by default.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-update-settings.html
 	 *
@@ -1369,7 +1390,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates an index template.
+	 * Create or update an index template.
+	 * Index templates define settings, mappings, and aliases that can be applied automatically to new indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-templates-v1.html
 	 *
@@ -1416,7 +1438,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Performs the refresh operation in one or more indices.
+	 * A refresh makes recent operations performed on one or more indices available for search.
+	 * For data streams, the API runs the refresh operation on the stream’s backing indices.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-refresh.html
 	 *
@@ -1467,7 +1490,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Returns information about any matching indices, aliases, and data streams
+	 * Resolves the specified name(s) and/or index patterns for indices, aliases, and data streams.
+	 * Multiple patterns and remote clusters are supported.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-resolve-index-api.html
 	 *
@@ -1508,8 +1532,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Updates an alias to point to a new index when the existing index
-	 * is considered to be too large or too old.
+	 * Creates a new index for a data stream or index alias.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/indices-rollover-index.html
 	 *
@@ -1569,7 +1592,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Simulate matching the given index name against the index templates in the system
+	 * Simulate an index.
+	 * Returns the index configuration that would be applied to the specified index from an existing index template.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-simulate-index.html
 	 *
@@ -1611,7 +1635,8 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Simulate resolving the given template name or body
+	 * Simulate an index template.
+	 * Returns the index configuration that would be applied by a particular index template.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-simulate-template.html
 	 *
@@ -1666,7 +1691,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Updates index aliases.
+	 * Adds a data stream or index to an alias.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-aliases.html
 	 *
@@ -1708,7 +1733,7 @@ class Indices extends AbstractEndpoint
 
 
 	/**
-	 * Allows a user to validate a potentially expensive query without executing it.
+	 * Validates a potentially expensive query without executing it.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-validate.html
 	 *

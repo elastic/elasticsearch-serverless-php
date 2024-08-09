@@ -29,7 +29,7 @@ use Http\Promise\Promise;
 class Logstash extends AbstractEndpoint
 {
 	/**
-	 * Deletes Logstash Pipelines used by Central Management
+	 * Deletes a pipeline used for Logstash Central Management.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-delete-pipeline.html
 	 *
@@ -60,7 +60,7 @@ class Logstash extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves Logstash Pipelines used by Central Management
+	 * Retrieves pipelines used for Logstash Central Management.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-get-pipeline.html
 	 *
@@ -97,7 +97,7 @@ class Logstash extends AbstractEndpoint
 
 
 	/**
-	 * Adds and updates Logstash Pipelines used for Central Management
+	 * Creates or updates a pipeline used for Logstash Central Management.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/logstash-api-put-pipeline.html
 	 *

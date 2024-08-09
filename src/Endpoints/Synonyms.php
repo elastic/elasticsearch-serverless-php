@@ -191,7 +191,7 @@ class Synonyms extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates a synonyms set
+	 * Creates or updates a synonym set.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-synonyms-set.html
 	 *

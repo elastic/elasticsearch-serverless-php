@@ -37,6 +37,8 @@ class Inference extends AbstractEndpoint
 	 * @param string $task_type The task type
 	 * @param string $inference_id The inference Id
 	 * @param array{
+	 *     dry_run: bool, // When true, the endpoint is not deleted, and a list of ingest processors which reference this endpoint is returned
+	 *     force: bool, // When true, the inference endpoint is forcefully deleted even if it is still being used by ingest processors or semantic text fields
 	 *     pretty: bool, // Pretty format the returned JSON response. (DEFAULT: false)
 	 *     human: bool, // Return human readable values for statistics. (DEFAULT: true)
 	 *     error_trace: bool, // Include the stack trace of returned errors. (DEFAULT: false)
@@ -58,7 +60,15 @@ class Inference extends AbstractEndpoint
 			$url = '/_inference/' . $this->encode($inference_id);
 			$method = 'DELETE';
 		}
-		$url = $this->addQueryString($url, $params, ['pretty', 'human', 'error_trace', 'source', 'filter_path']);
+		$url = $this->addQueryString($url, $params, [
+			'dry_run',
+			'force',
+			'pretty',
+			'human',
+			'error_trace',
+			'source',
+			'filter_path',
+		]);
 		$headers = [
 		    'Accept' => 'application/json',
 		];
@@ -108,7 +118,7 @@ class Inference extends AbstractEndpoint
 
 
 	/**
-	 * Perform inference
+	 * Perform inference on the service
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/post-inference-api.html
 	 *
@@ -154,7 +164,7 @@ class Inference extends AbstractEndpoint
 
 
 	/**
-	 * Configure an inference endpoint for use in the Inference API
+	 * Create an inference endpoint
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/put-inference-api.html
 	 *

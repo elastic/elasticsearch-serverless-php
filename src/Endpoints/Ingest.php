@@ -29,7 +29,7 @@ use Http\Promise\Promise;
 class Ingest extends AbstractEndpoint
 {
 	/**
-	 * Deletes a pipeline.
+	 * Deletes one or more existing ingest pipeline.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/delete-pipeline-api.html
 	 *
@@ -71,7 +71,8 @@ class Ingest extends AbstractEndpoint
 
 
 	/**
-	 * Returns a pipeline.
+	 * Returns information about one or more ingest pipelines.
+	 * This API returns a local reference of the pipeline.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/get-pipeline-api.html
 	 *
@@ -119,7 +120,9 @@ class Ingest extends AbstractEndpoint
 
 
 	/**
-	 * Returns a list of the built-in patterns.
+	 * Extracts structured fields out of a single text field within a document.
+	 * You choose which field to extract matched fields from, as well as the grok pattern you expect will match.
+	 * A grok pattern is like a regular expression that supports aliased expressions that can be reused.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/grok-processor.html
 	 *
@@ -149,7 +152,8 @@ class Ingest extends AbstractEndpoint
 
 
 	/**
-	 * Creates or updates a pipeline.
+	 * Creates or updates an ingest pipeline.
+	 * Changes made using this API take effect immediately.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/ingest.html
 	 *
@@ -194,7 +198,7 @@ class Ingest extends AbstractEndpoint
 
 
 	/**
-	 * Allows to simulate a pipeline with example documents.
+	 * Executes an ingest pipeline against a set of provided documents.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/simulate-pipeline-api.html
 	 *

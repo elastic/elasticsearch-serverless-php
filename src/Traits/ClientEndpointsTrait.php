@@ -29,7 +29,8 @@ use Http\Promise\Promise;
 trait ClientEndpointsTrait
 {
 	/**
-	 * Allows to perform multiple index/update/delete operations in a single request.
+	 * Performs multiple indexing or delete operations in a single API call.
+	 * This reduces overhead and can greatly increase indexing speed.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/docs-bulk.html
 	 *
@@ -91,7 +92,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Explicitly clears the search context for a scroll.
+	 * Clears the search context and results for a scrolling search.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/clear-scroll-api.html
 	 *
@@ -135,7 +136,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Close a point in time
+	 * Closes a point-in-time.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/point-in-time-api.html
 	 *
@@ -242,9 +243,8 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Creates a new document in the index.
-	 *
-	 * Returns a 409 response when a document with a same ID already exists in the index.
+	 * Adds a JSON document to the specified data stream or index and makes it searchable.
+	 * If the target is an index and the document already exists, the request updates the document and increments its version.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-index_.html
 	 *
@@ -300,7 +300,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Removes a document from the index.
+	 * Removes a JSON document from the specified index.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-delete.html
 	 *
@@ -354,7 +354,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Deletes documents matching the provided query.
+	 * Deletes documents that match the specified query.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-delete-by-query.html
 	 *
@@ -458,7 +458,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Deletes a script.
+	 * Deletes a stored script or search template.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/modules-scripting.html
 	 *
@@ -499,7 +499,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Returns information about whether a document exists in an index.
+	 * Checks if a document in an index exists.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-get.html
 	 *
@@ -558,7 +558,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Returns information about whether a document source exists in an index.
+	 * Checks if a document's `_source` is stored.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-get.html
 	 *
@@ -615,7 +615,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Returns information about why a specific matches (or doesn't match) a query.
+	 * Returns information about why a specific document matches (or doesn’t match) a query.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-explain.html
 	 *
@@ -685,7 +685,9 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Returns the information about the capabilities of fields among multiple indices.
+	 * The field capabilities API returns the information about the capabilities of fields among multiple indices.
+	 * The field capabilities API returns runtime fields like any other field. For example, a runtime field with a type
+	 * of keyword is returned as any other field that belongs to the `keyword` family.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-field-caps.html
 	 *
@@ -810,7 +812,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Returns a script.
+	 * Retrieves a stored script or search template.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/modules-scripting.html
 	 *
@@ -900,7 +902,8 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Creates or updates a document in an index.
+	 * Adds a JSON document to the specified data stream or index and makes it searchable.
+	 * If the target is an index and the document already exists, the request updates the document and increments its version.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-index_.html
 	 *
@@ -1076,6 +1079,7 @@ trait ClientEndpointsTrait
 	 *     expand_wildcards: string|array, // Type of index that wildcard expressions can match. If the request can target data streams, this argument determines whether wildcard expressions match hidden data streams.
 	 *     ignore_throttled: bool, // If true, concrete, expanded or aliased indices are ignored when frozen.
 	 *     ignore_unavailable: bool, // If true, missing or closed indices are not included in the response.
+	 *     include_named_queries_score: bool, // Indicates whether hit.matched_queries should be rendered as a map that includesthe name of the matched query associated with its score (true)or as an array containing the name of the matched queries (false)This functionality reruns each named query on every hit in a search response.Typically, this adds a small overhead to a request.However, using computationally expensive named queries on a large number of hits may add significant overhead.
 	 *     max_concurrent_searches: int, // Maximum number of concurrent searches the multi search API can execute.
 	 *     max_concurrent_shard_requests: int, // Maximum number of concurrent shard requests that each sub-search request executes per node.
 	 *     pre_filter_shard_size: int, // Defines a threshold that enforces a pre-filter roundtrip to prefilter search shards based on query rewriting if the number of shards the search request expands to exceeds the threshold. This filter roundtrip can limit the number of shards significantly if for instance a shard can not match any documents based on its rewrite method i.e., if date filters are mandatory to match but the shard bounds and the query are disjoint.
@@ -1115,6 +1119,7 @@ trait ClientEndpointsTrait
 			'expand_wildcards',
 			'ignore_throttled',
 			'ignore_unavailable',
+			'include_named_queries_score',
 			'max_concurrent_searches',
 			'max_concurrent_shard_requests',
 			'pre_filter_shard_size',
@@ -1137,7 +1142,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Allows to execute several search template operations in one request.
+	 * Runs multiple templated searches with a single request.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
 	 *
@@ -1270,7 +1275,12 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Open a point in time that can be used in subsequent searches
+	 * A search request by default executes against the most recent visible data of the target indices,
+	 * which is called point in time. Elasticsearch pit (point in time) is a lightweight view into the
+	 * state of the data as it existed when initiated. In some cases, it’s preferred to perform multiple
+	 * search requests using the same point in time. For example, if refreshes happen between
+	 * `search_after` requests, then the results of those requests might not be consistent as changes happening
+	 * between searches are only visible to the more recent point in time.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/point-in-time-api.html
 	 *
@@ -1313,6 +1323,7 @@ trait ClientEndpointsTrait
 		]);
 		$headers = [
 		    'Accept' => 'application/json',
+		    'Content-Type' => 'application/json'
 		];
 		return $this->sendRequest($this->createRequest($method, $url, $headers));
 	}
@@ -1349,7 +1360,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Creates or updates a script.
+	 * Creates or updates a stored script or search template.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/modules-scripting.html
 	 *
@@ -1405,7 +1416,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Allows to evaluate the quality of ranked search results over a set of typical search queries
+	 * Enables you to evaluate the quality of ranked search results over a set of typical search queries.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-rank-eval.html
 	 *
@@ -1519,7 +1530,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Allows to use the Mustache language to pre-render a search definition.
+	 * Renders a search template as a search request body.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/render-search-template-api.html
 	 *
@@ -1562,7 +1573,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Allows an arbitrary script to be executed and a result to be returned
+	 * Runs a script and returns a result.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/painless/master/painless-execute-api.html
 	 *
@@ -1645,7 +1656,9 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Returns results matching a query.
+	 * Returns search hits that match the query defined in the request.
+	 * You can provide search queries using the `q` query string parameter or the request body.
+	 * If both are specified, only the query parameter is used.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/search-search.html
 	 *
@@ -1667,6 +1680,7 @@ trait ClientEndpointsTrait
 	 *     explain: bool, // If `true`, returns detailed information about score computation as part of a hit.
 	 *     ignore_throttled: bool, // If `true`, concrete, expanded or aliased indices will be ignored when frozen.
 	 *     ignore_unavailable: bool, // If `false`, the request returns an error if it targets a missing or closed index.
+	 *     include_named_queries_score: bool, // Indicates whether hit.matched_queries should be rendered as a map that includesthe name of the matched query associated with its score (true)or as an array containing the name of the matched queries (false)This functionality reruns each named query on every hit in a search response.Typically, this adds a small overhead to a request.However, using computationally expensive named queries on a large number of hits may add significant overhead.
 	 *     lenient: bool, // If `true`, format-based query failures (such as providing text to a numeric field) in the query string will be ignored.This parameter can only be used when the `q` query string parameter is specified.
 	 *     max_concurrent_shard_requests: int, // Defines the number of concurrent shard requests per node this search executes concurrently.This value should be used to limit the impact of the search on the cluster in order to limit the number of concurrent shard requests.
 	 *     min_compatible_shard_node: string, // The minimum version of the node that can handle the requestAny handling node with a lower version will fail the request.
@@ -1738,6 +1752,7 @@ trait ClientEndpointsTrait
 			'explain',
 			'ignore_throttled',
 			'ignore_unavailable',
+			'include_named_queries_score',
 			'lenient',
 			'max_concurrent_shard_requests',
 			'min_compatible_shard_node',
@@ -1850,7 +1865,7 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Allows to use the Mustache language to pre-render a search definition.
+	 * Runs a search with a search template.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html
 	 *
@@ -2095,9 +2110,8 @@ trait ClientEndpointsTrait
 
 
 	/**
-	 * Updates documents that match the specified query. If no query is specified,
-	 *  performs an update on every document in the index without changing the source,
-	 * for example to pick up a mapping change.
+	 * Updates documents that match the specified query.
+	 * If no query is specified, performs an update on every document in the data stream or index without modifying the source, which is useful for picking up mapping changes.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-update-by-query.html
 	 *

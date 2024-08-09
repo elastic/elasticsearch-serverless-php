@@ -29,7 +29,10 @@ use Http\Promise\Promise;
 class AsyncSearch extends AbstractEndpoint
 {
 	/**
-	 * Deletes an async search by ID. If the search is still running, the search request will be cancelled. Otherwise, the saved search results are deleted.
+	 * Deletes an async search by identifier.
+	 * If the search is still running, the search request will be cancelled.
+	 * Otherwise, the saved search results are deleted.
+	 * If the Elasticsearch security features are enabled, the deletion of a specific async search is restricted to: the authenticated user that submitted the original search request; users that have the `cancel_task` cluster privilege.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/async-search.html
 	 *
@@ -60,7 +63,8 @@ class AsyncSearch extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves the results of a previously submitted async search request given its ID.
+	 * Retrieves the results of a previously submitted async search request given its identifier.
+	 * If the Elasticsearch security features are enabled, access to the results of a specific async search is restricted to the user or API key that submitted it.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/async-search.html
 	 *
@@ -103,7 +107,9 @@ class AsyncSearch extends AbstractEndpoint
 
 
 	/**
-	 * Retrieves the status of a previously submitted async search request given its ID.
+	 * Get async search status
+	 * Retrieves the status of a previously submitted async search request given its identifier, without retrieving search results.
+	 * If the Elasticsearch security features are enabled, use of this API is restricted to the `monitoring_user` role.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/async-search.html
 	 *
@@ -134,7 +140,11 @@ class AsyncSearch extends AbstractEndpoint
 
 
 	/**
-	 * Executes a search request asynchronously.
+	 * Runs a search request asynchronously.
+	 * When the primary sort of the results is an indexed field, shards get sorted based on minimum and maximum value that they hold for that field, hence partial results become available following the sort criteria that was requested.
+	 * Warning: Async search does not support scroll nor search requests that only include the suggest section.
+	 * By default, Elasticsearch doesn’t allow you to store an async search response larger than 10Mb and an attempt to do this results in an error.
+	 * The maximum allowed size for a stored async search response can be set by changing the `search.max_async_search_response_size` cluster level setting.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/async-search.html
 	 *

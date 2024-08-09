@@ -29,7 +29,8 @@ use Http\Promise\Promise;
 class Eql extends AbstractEndpoint
 {
 	/**
-	 * Deletes an async EQL search by ID. If the search is still running, the search request will be cancelled. Otherwise, the saved search results are deleted.
+	 * Deletes an async EQL search or a stored synchronous EQL search.
+	 * The API also deletes results for the search.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/eql-search-api.html
 	 *
@@ -62,7 +63,7 @@ class Eql extends AbstractEndpoint
 
 
 	/**
-	 * Returns async results from previously executed Event Query Language (EQL) search
+	 * Returns the current status and available results for an async EQL search or a stored synchronous EQL search.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-search-api.html
 	 *
@@ -103,7 +104,7 @@ class Eql extends AbstractEndpoint
 
 
 	/**
-	 * Returns the status of a previously submitted async or stored Event Query Language (EQL) search
+	 * Returns the current status for an async EQL search or a stored synchronous EQL search without returning results.
 	 *
 	 * @see https://www.elastic.co/guide/en/elasticsearch/reference/{branch}/get-async-eql-status-api.html
 	 *
