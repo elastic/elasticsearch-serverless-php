@@ -1,10 +1,9 @@
-<p align="center">
-    <img src="https://github.com/elastic/elasticsearch-py/raw/main/docs/logo-elastic-glyph-color.svg" width="20%" alt="Elastic logo" />
-</p>
-
 # Elasticsearch Serverless Client
 
 [![main](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/elastic/elasticsearch-serverless-php/actions/workflows/tests.yml)
+
+> [!WARNING]
+> Starting with the release of the Elastic Stack 9.0.0, this client will be discontinued. Instead, you can use the latest version of the [Elasticsearch PHP Client](https://github.com/elastic/elasticsearch-php) to build your Elasticsearch Serverless PHP applications.
 
 This is the official Elastic client for the [Elasticsearch Cloud Serverless](https://www.elastic.co/elasticsearch/serverless).
 
